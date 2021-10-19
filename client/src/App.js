@@ -1,5 +1,12 @@
 import React, { useState, useCallback } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { useRefCreate } from './hooks/useRefCreate';
+
+import {
+    setFoodLevel,
+    setHealthLevel,
+    setMoodLevel,
+} from './redux/reducers/cat.reducer';
 
 import { ThemeProvider, createTheme } from '@mui/material';
 import { CssBaseline } from '@mui/material';
@@ -12,19 +19,17 @@ const darkTheme = createTheme({
     },
 });
 
-const MAX_FOOD_LEVEL = 100;
-const MAX_HEALTH_LEVEL = 100;
-
 let startGame;
 
 const App = () => {
-    const [catName, setCatName] = useState(null);
-
-    const [foodLevel, setFoodLevel] = useState(MAX_FOOD_LEVEL);
-    const [healthLevel, setHealthLevel] = useState(MAX_HEALTH_LEVEL);
+    const { foodLevel, healthLevel, moodLevel } = useSelector(
+        (state) => state.cat.cat
+    );
+    const dispatch = useDispatch();
 
     const currentFood = useRefCreate(foodLevel);
     const currentHealth = useRefCreate(healthLevel);
+    const currentMood = useRefCreate(moodLevel);
 
     const [intervalId, setIntervalId] = useState(0);
 
@@ -35,16 +40,21 @@ const App = () => {
     const tick = () => {
         startGame = setInterval(() => {
             if (!checkZeroFoodLevel()) {
-                setFoodLevel((prevFoodLevel) => prevFoodLevel - 1);
+                dispatch(setFoodLevel(currentFood.current - 1));
                 if (currentFood.current > 50 && currentHealth.current < 100) {
-                    setHealthLevel((prev) =>
-                        prev + 5 > 100 ? (prev = 100) : prev + 5
+                    dispatch(
+                        setHealthLevel(
+                            currentHealth.current + 5 > 100
+                                ? (currentHealth.current = 100)
+                                : currentHealth.current + 5
+                        )
                     );
                 }
             } else {
-                setHealthLevel((prev) => prev - 1);
+                dispatch(setHealthLevel(currentHealth.current - 1));
             }
-        }, 100);
+            dispatch(setMoodLevel(currentMood.current - 5));
+        }, 1000);
 
         setIntervalId(startGame);
     };
@@ -54,20 +64,29 @@ const App = () => {
     }
 
     const feed = () => {
-        setFoodLevel((prev) => (prev + 5 > 100 ? (prev = 100) : prev + 5));
+        dispatch(
+            setFoodLevel(
+                currentFood.current + 5 > 100
+                    ? (currentFood.current = 100)
+                    : currentFood.current + 5
+            )
+        );
+    };
+
+    const petCat = () => {
+        dispatch(setMoodLevel(100));
     };
 
     return (
         <ThemeProvider theme={darkTheme}>
             <CssBaseline />
             <MainPage
-                catName={catName}
-                setCatName={setCatName}
                 tick={tick}
-                healthLevel={healthLevel}
                 currentFood={currentFood}
                 currentHealth={currentHealth}
+                currentMood={currentMood}
                 feed={feed}
+                petCat={petCat}
             />
         </ThemeProvider>
     );

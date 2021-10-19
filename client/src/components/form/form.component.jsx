@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { createCat } from '../../redux/reducers/cat.reducer';
+
 import {
     Grid,
     Card,
@@ -6,14 +9,26 @@ import {
     CardActions,
     Button,
     TextField,
+    FormControl,
+    FormLabel,
+    RadioGroup,
+    FormControlLabel,
+    Radio,
     Typography,
 } from '@mui/material';
 
-const Form = ({ setCatName, tick }) => {
-    const [value, setValue] = useState('');
+const Form = ({ tick }) => {
+    const [cat, setCat] = useState({ name: '', img: '' });
+    const dispatch = useDispatch();
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+
+        setCat({ ...cat, [name]: value });
+    };
 
     const startGameHandler = () => {
-        setCatName(value);
+        dispatch(createCat(cat));
         tick();
     };
 
@@ -28,21 +43,81 @@ const Form = ({ setCatName, tick }) => {
                         <Typography variant="h4" gutterBottom>
                             Create your cat
                         </Typography>
-                        <TextField
-                            label="Cat name"
-                            value={value}
-                            onChange={(e) => setValue(e.target.value)}
-                        />
+                        <Grid container>
+                            <Grid item lg={12}>
+                                <TextField
+                                    label="Cat name"
+                                    value={cat.name}
+                                    name="name"
+                                    onChange={handleChange}
+                                />
+                            </Grid>
+                            <Grid item lg={12}>
+                                <FormControl component="fieldset">
+                                    <FormLabel component="legend">
+                                        Color
+                                    </FormLabel>
+                                    <RadioGroup
+                                        aria-label="color"
+                                        name="img"
+                                        value={cat.img}
+                                        onChange={handleChange}
+                                    >
+                                        <FormControlLabel
+                                            value="black"
+                                            control={<Radio />}
+                                            label="Black"
+                                        />
+                                        <FormControlLabel
+                                            value="white"
+                                            control={<Radio />}
+                                            label="White"
+                                        />
+                                        <FormControlLabel
+                                            value="brown"
+                                            control={<Radio />}
+                                            label="Brown"
+                                        />
+                                        <FormControlLabel
+                                            value="point"
+                                            control={<Radio />}
+                                            label="Point"
+                                        />
+                                    </RadioGroup>
+                                </FormControl>
+                            </Grid>
+                        </Grid>
                     </CardContent>
                     <CardActions>
                         <Button
                             variant="outlined"
                             sx={{ mr: 'auto', ml: 'auto' }}
-                            onClick={() => startGameHandler()}
+                            onClick={startGameHandler}
                         >
                             create
                         </Button>
                     </CardActions>
+                </Card>
+            </Grid>
+            <Grid item lg={12} sx={{ mt: 2 }}>
+                <Card
+                    variant="outlined"
+                    sx={{
+                        textAlign: 'center',
+                        maxWidth: 700,
+                        mr: 'auto',
+                        ml: 'auto',
+                    }}
+                >
+                    <CardContent>
+                        <Typography variant="h4" gutterBottom>
+                            {cat.name}
+                        </Typography>
+                        <img
+                            src={`https://komornyi.space/static/img/cat_project/img/cats/${cat.img}.png`}
+                            alt={cat.name}
+                        />
+                    </CardContent>
                 </Card>
             </Grid>
         </Grid>

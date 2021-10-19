@@ -11,7 +11,10 @@ import {
     faSkullCrossbones,
 } from '@fortawesome/free-solid-svg-icons';
 
-import { faHospital } from '@fortawesome/free-regular-svg-icons';
+import {
+    faHospital,
+    faHeart as faHeartRegular,
+} from '@fortawesome/free-regular-svg-icons';
 
 library.add(
     faHome,
@@ -20,6 +23,7 @@ library.add(
     faCat,
     faHeart,
     faHeartbeat,
+    faHeartRegular,
     faHeartBroken,
     faDrumstickBite,
     faSkullCrossbones

@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { motion } from 'framer-motion';
 
 import {
     Card,
@@ -10,40 +12,38 @@ import {
     CardActions,
     Button,
 } from '@mui/material';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-const Cat = ({ catName, currentFood, currentHealth, feed }) => {
+import FullHeart from '../../icons/fullHeart.png';
+import BrokenHeart from '../../icons/broken-heart.png';
+import Fish from '../../icons/fish.png';
+import FishBones from '../../icons/fish-bone.png';
+import TombStone from '../../icons/tombstone.png';
+
+import { useStyles } from './cat.styles';
+
+const Cat = ({ currentFood, currentHealth, currentMood, feed, petCat }) => {
+    const classes = useStyles();
+    const { name, img } = useSelector((state) => state.cat.cat);
+
     const [warning, setWarning] = useState('');
 
-    const checkHealthLevel = () => {
+    const checkFoodLevel = () => {
         switch (true) {
-            case currentHealth.current >= 80 && currentHealth.current <= 100:
-                return '#00ff00';
-            case currentHealth.current >= 60 && currentHealth.current < 80:
-                return '#fff000';
-            case currentHealth.current >= 40 && currentHealth.current < 60:
-                return '#ff8c00';
-            case currentHealth.current >= 20 && currentHealth.current < 40:
-                return '#ff4500';
-            case currentHealth.current >= 0 && currentHealth.current < 20:
-                return '#ff0000';
+            case currentFood.current >= 30 && currentFood.current <= 100:
+                return Fish;
+            case currentFood.current >= 0 && currentFood.current < 30:
+                return FishBones;
             default:
                 break;
         }
     };
 
-    const checkFoodLevel = () => {
+    const checkHealthLevel = () => {
         switch (true) {
-            case currentFood.current >= 80 && currentFood.current <= 100:
-                return '#00ff00';
-            case currentFood.current >= 60 && currentFood.current < 80:
-                return '#fff000';
-            case currentFood.current >= 40 && currentFood.current < 60:
-                return '#ff8c00';
-            case currentFood.current >= 20 && currentFood.current < 40:
-                return '#ff4500';
-            case currentFood.current >= 0 && currentFood.current < 20:
-                return '#ff0000';
+            case currentHealth.current >= 30 && currentHealth.current <= 100:
+                return FullHeart;
+            case currentHealth.current >= 0 && currentHealth.current < 30:
+                return BrokenHeart;
             default:
                 break;
         }
@@ -52,8 +52,8 @@ const Cat = ({ catName, currentFood, currentHealth, feed }) => {
     const checkForWarnings = () => {
         if (currentFood.current === 100) {
             setWarning('Cat does not want to eat!');
-        } else if (currentHealth.current <= 0) {
-            setWarning('You are killed your cat :(');
+        } else if (currentHealth.current === 0) {
+            setWarning('You killed your cat :(');
         } else {
             setWarning('');
         }
@@ -65,26 +65,56 @@ const Cat = ({ catName, currentFood, currentHealth, feed }) => {
 
     return (
         <Grid container>
-            <Grid item lg={12}>
+            <Grid item lg={2} sx={{ textAlign: 'center' }}>
+                <Card variant="outlined">
+                    <CardContent>
+                        <Typography variant="h4">{name}</Typography>
+                        {currentHealth.current !== 0 ? (
+                            <img
+                                src={`https://komornyi.space/static/img/cat_project/img/cats/${
+                                    currentMood.current > 50
+                                        ? img
+                                        : 'sad_' + img
+                                }.png`}
+                                width="100%"
+                                alt={name}
+                            />
+                        ) : (
+                            <img src={TombStone} width="100%" alt={name} />
+                        )}
+                    </CardContent>
+                </Card>
+            </Grid>
+            <Grid item lg={10}>
                 <Card variant="outlined">
                     <CardHeader
                         avatar={
                             <Avatar sx={{ backgroundColor: 'grey' }}>
-                                {catName[0]}
+                                {name[0]}
                             </Avatar>
                         }
-                        title={catName}
+                        title={name}
                     />
                     <CardContent>
                         <Grid container item lg={12} spacing={2}>
                             <Grid item lg={2} sx={{ textAlign: 'right' }}>
-                                <FontAwesomeIcon
-                                    icon={['fas', 'heart']}
-                                    style={{
-                                        color: 'red',
-                                        position: 'relative',
-                                        bottom: '10px',
+                                <motion.img
+                                    src={checkHealthLevel()}
+                                    alt=""
+                                    animate={{
+                                        opacity:
+                                            currentHealth.current < 20
+                                                ? [1, 0, 1, 0, 1]
+                                                : [],
                                     }}
+                                    transition={{
+                                        duration: 1,
+                                        ease: 'easeInOut',
+                                        times: [0, 0.2, 0.5, 0.8, 1],
+                                        loop: Infinity,
+                                        repeatDelay: 1,
+                                    }}
+                                    className={classes.healthIcon}
                                 />
                             </Grid>
                             <Grid
@@ -106,13 +136,23 @@ const Cat = ({ catName, currentFood, currentHealth, feed }) => {
                                 )}
                             </Grid>
                             <Grid item lg={2} sx={{ textAlign: 'right' }}>
-                                <FontAwesomeIcon
-                                    icon={['fas', 'drumstick-bite']}
-                                    style={{
-                                        color: 'brown',
-                                        position: 'relative',
-                                        bottom: '10px',
+                                <motion.img
+                                    src={checkFoodLevel()}
+                                    alt=""
+                                    animate={{
+                                        opacity:
+                                            currentFood.current < 30
+                                                ? [1, 0, 1, 0, 1]
+                                                : [],
                                     }}
+                                    transition={{
+                                        duration: 1,
+                                        ease: 'easeInOut',
+                                        times: [0, 0.2, 0.5, 0.8, 1],
+                                        loop: Infinity,
+                                        repeatDelay: 1,
+                                    }}
+                                    className={classes.foodIcon}
                                 />
                             </Grid>
                             <Grid
@@ -137,9 +177,14 @@ const Cat = ({ catName, currentFood, currentHealth, feed }) => {
                     </CardContent>
                     <CardActions>
                         {currentHealth.current !== 0 && (
-                            <Button variant="outlined" onClick={feed}>
-                                Feed {catName}
-                            </Button>
+                            <>
+                                <Button variant="outlined" onClick={feed}>
+                                    Feed {name}
+                                </Button>
+                                <Button variant="outlined" onClick={petCat}>
+                                    Pet {name}
+                                </Button>
+                            </>
                         )}
                     </CardActions>
                 </Card>

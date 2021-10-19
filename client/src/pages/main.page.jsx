@@ -1,28 +1,31 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
+
 import { Container } from '@mui/material';
 import Form from '../components/form/form.component';
 import Cat from '../components/cat/cat.component';
 
 const MainPage = ({
-    catName,
-    setCatName,
     tick,
-    healthLevel,
     currentFood,
     currentHealth,
+    currentMood,
     feed,
+    petCat,
 }) => {
+    const { name } = useSelector((state) => state.cat.cat);
+
     return (
         <Container maxWidth="lg" sx={{ mt: 5 }}>
-            {!catName ? (
-                <Form setCatName={setCatName} tick={tick} />
+            {!name ? (
+                <Form tick={tick} />
             ) : (
                 <Cat
-                    catName={catName}
-                    healthLevel={healthLevel}
                     currentFood={currentFood}
                     currentHealth={currentHealth}
+                    currentMood={currentMood}
                     feed={feed}
+                    petCat={petCat}
                 />
             )}
         </Container>
