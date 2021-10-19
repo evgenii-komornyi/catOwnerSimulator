@@ -18,7 +18,7 @@ import {
 } from '@mui/material';
 
 const Form = ({ tick }) => {
-    const [cat, setCat] = useState({ name: '', img: '' });
+    const [cat, setCat] = useState({ name: '', img: 'black' });
     const dispatch = useDispatch();
 
     const handleChange = (e) => {
@@ -28,8 +28,12 @@ const Form = ({ tick }) => {
     };
 
     const startGameHandler = () => {
-        dispatch(createCat(cat));
-        tick();
+        if (cat.name === '') {
+            alert('Name cannot be empty');
+        } else {
+            dispatch(createCat(cat));
+            tick();
+        }
     };
 
     return (

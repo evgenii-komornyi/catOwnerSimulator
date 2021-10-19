@@ -61,7 +61,7 @@ const Cat = ({ currentFood, currentHealth, currentMood, feed, petCat }) => {
 
     useEffect(() => {
         checkForWarnings();
-    }, [currentFood.current]);
+    }, [currentFood.current, currentHealth.current]);
 
     return (
         <Grid container>
@@ -103,9 +103,10 @@ const Cat = ({ currentFood, currentHealth, currentMood, feed, petCat }) => {
                                     alt=""
                                     animate={{
                                         opacity:
-                                            currentHealth.current < 20
+                                            currentHealth.current < 20 &&
+                                            currentHealth.current !== 0
                                                 ? [1, 0, 1, 0, 1]
-                                                : [],
+                                                : [1, 1],
                                     }}
                                     transition={{
                                         duration: 1,
@@ -141,9 +142,10 @@ const Cat = ({ currentFood, currentHealth, currentMood, feed, petCat }) => {
                                     alt=""
                                     animate={{
                                         opacity:
-                                            currentFood.current < 30
+                                            currentFood.current < 30 &&
+                                            currentFood.current !== 0
                                                 ? [1, 0, 1, 0, 1]
-                                                : [],
+                                                : [1, 1],
                                     }}
                                     transition={{
                                         duration: 1,
