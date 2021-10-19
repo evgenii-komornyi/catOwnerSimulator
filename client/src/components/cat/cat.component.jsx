@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
+import { useRefCreate } from '../../hooks/useRefCreate';
+
 import { motion } from 'framer-motion';
 
 import {
@@ -21,9 +23,15 @@ import TombStone from '../../icons/tombstone.png';
 
 import { useStyles } from './cat.styles';
 
-const Cat = ({ currentFood, currentHealth, currentMood, feed, petCat }) => {
+const Cat = ({ feed, petCat }) => {
     const classes = useStyles();
-    const { name, img } = useSelector((state) => state.cat.cat);
+    const { name, img, foodLevel, healthLevel, moodLevel } = useSelector(
+        (state) => state.cat.cat
+    );
+
+    const currentFood = useRefCreate(foodLevel);
+    const currentHealth = useRefCreate(healthLevel);
+    const currentMood = useRefCreate(moodLevel);
 
     const [warning, setWarning] = useState('');
 

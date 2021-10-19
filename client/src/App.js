@@ -80,14 +80,7 @@ const App = () => {
     return (
         <ThemeProvider theme={darkTheme}>
             <CssBaseline />
-            <MainPage
-                tick={tick}
-                currentFood={currentFood}
-                currentHealth={currentHealth}
-                currentMood={currentMood}
-                feed={feed}
-                petCat={petCat}
-            />
+            <MainPage tick={tick} feed={feed} petCat={petCat} />
         </ThemeProvider>
     );
 };
