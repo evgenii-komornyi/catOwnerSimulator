@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { createCat } from '../../redux/reducers/cat.reducer';
+import { setToilet } from '../../redux/reducers/toilet.reducer';
 
 import {
     Grid,
@@ -33,6 +34,7 @@ const Form = ({ tick }) => {
             alert('Name cannot be empty');
         } else {
             dispatch(createCat(cat));
+            dispatch(setToilet({ id: generateID() }));
             tick();
         }
     };

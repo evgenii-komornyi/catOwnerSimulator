@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import React, { useState, useEffect, useRef } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { useRefCreate } from '../../hooks/useRefCreate';
 
 import { motion } from 'framer-motion';
@@ -15,6 +15,8 @@ import {
     Button,
 } from '@mui/material';
 
+import { clean } from '../../redux/reducers/toilet.reducer';
+
 import FullHeart from '../../icons/fullHeart.png';
 import BrokenHeart from '../../icons/broken-heart.png';
 import Fish from '../../icons/fish.png';
@@ -25,19 +27,45 @@ import { useStyles } from './cat.styles';
 
 const Cat = ({ feed, petCat }) => {
     const classes = useStyles();
-    const { id, name, img, foodLevel, healthLevel, moodLevel, digestionLevel } =
+    const dispatch = useDispatch();
+
+    const { name, img, foodLevel, healthLevel, moodLevel, digestionLevel } =
         useSelector((state) => state.cat);
 
-    const { toilet_full, toilet_empty, toilet_used } = useSelector(
-        (state) => state.toilet
-    );
+    const { toilet_img } = useSelector((state) => state.toilet);
 
-    console.log('cat: ', id);
+    const catId = useSelector((state) => state.cat.id);
+    const toiletId = useSelector((state) => state.toilet.id);
+
     const currentFood = useRefCreate(foodLevel);
     const currentHealth = useRefCreate(healthLevel);
     const currentMood = useRefCreate(moodLevel);
     const currentDigestion = useRefCreate(digestionLevel);
 
+    const audioRef = useRef();
+
+    const [audio, setAudio] = useState('');
+
+    useEffect(() => {
+        if (currentDigestion.current <= 1) {
+            setAudio('poo');
+            if (audioRef.current) {
+                audioRef.current.load();
+                const playPromise = audioRef.current.play();
+                if (playPromise) {
+                    playPromise
+                        .then((_) => {
+                            return audioRef.current.play();
+                        })
+                        .catch((error) => {
+                            console.log(error.message);
+                        });
+                }
+            }
+        } else {
+            setAudio('');
+        }
+    }, [audio, currentDigestion.current]);
     const [warning, setWarning] = useState('');
 
     const checkFoodLevel = () => {
@@ -94,11 +122,7 @@ const Cat = ({ feed, petCat }) => {
                                     alt={name}
                                 />
                                 <img
-                                    src={`https://komornyi.space/static/img/cat_project/img/cats/${
-                                        currentDigestion.current <= 1
-                                            ? toilet_full
-                                            : toilet_empty
-                                    }.png`}
+                                    src={`https://komornyi.space/static/img/cat_project/img/cats/${toilet_img}.png`}
                                     width="100%"
                                     alt=""
                                 />
@@ -210,6 +234,12 @@ const Cat = ({ feed, petCat }) => {
                                 <Button variant="outlined" onClick={petCat}>
                                     Pet {name}
                                 </Button>
+                                <Button
+                                    variant="outlined"
+                                    onClick={() => dispatch(clean())}
+                                >
+                                    Clean toilet{' '}
+                                </Button>
                             </>
                         )}
                     </CardActions>
@@ -220,6 +250,12 @@ const Cat = ({ feed, petCat }) => {
                     <Typography variant="h6">{warning}</Typography>
                 )}
             </Grid>
+            <audio ref={audioRef}>
+                <source
+                    src={`https://komornyi.space/static/img/cat_project/audio/${audio}.mp3`}
+                    type="audio/mpeg"
+                />
+            </audio>
         </Grid>
     );
 };

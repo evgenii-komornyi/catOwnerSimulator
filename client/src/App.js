@@ -9,6 +9,8 @@ import {
     setDigestionLevel,
 } from './redux/reducers/cat.reducer';
 
+import { getShit } from './redux/reducers/toilet.reducer';
+
 import { ThemeProvider, createTheme } from '@mui/material';
 import { CssBaseline } from '@mui/material';
 
@@ -64,6 +66,10 @@ const App = () => {
                         : currentDigestion.current
                 )
             );
+
+            if (currentDigestion.current === 1) {
+                dispatch(getShit(currentDigestion.current));
+            }
 
             dispatch(setMoodLevel(currentMood.current - 5));
         }, 1000);
