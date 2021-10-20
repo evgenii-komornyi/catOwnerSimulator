@@ -6,7 +6,7 @@ import Form from '../components/form/form.component';
 import Cat from '../components/cat/cat.component';
 
 const MainPage = ({ tick, feed, petCat }) => {
-    const { name } = useSelector((state) => state.cat.cat);
+    const { name } = useSelector((state) => state.cat);
 
     return (
         <Container maxWidth="lg" sx={{ mt: 5 }}>

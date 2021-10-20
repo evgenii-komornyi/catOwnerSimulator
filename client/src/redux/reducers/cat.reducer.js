@@ -3,52 +3,60 @@ import { createSlice } from '@reduxjs/toolkit';
 const MAX_FOOD_LEVEL = 100;
 const MAX_HEALTH_LEVEL = 100;
 const MAX_MOOD_LEVEL = 100;
+const MAX_DIGESTION_LEVEL = 30;
 
 const initialState = {
-    cat: {
-        name: null,
-        img: null,
-        foodLevel: MAX_FOOD_LEVEL,
-        healthLevel: MAX_HEALTH_LEVEL,
-        moodLevel: MAX_MOOD_LEVEL,
-    },
+    id: null,
+    name: null,
+    img: null,
+    foodLevel: MAX_FOOD_LEVEL,
+    healthLevel: MAX_HEALTH_LEVEL,
+    moodLevel: MAX_MOOD_LEVEL,
+    digestionLevel: MAX_DIGESTION_LEVEL,
 };
 
 const reducer = createSlice({
     name: 'cat',
     initialState,
     reducers: {
-        createCat: (state, { payload: { name, img } }) => {
+        createCat: (state, { payload: { id, name, img } }) => {
             state = {
-                cat: {
-                    ...state.cat,
-                    name: name,
-                    img: img,
-                },
+                ...state,
+                id: id,
+                name: name,
+                img: img,
             };
 
             return state;
         },
         setFoodLevel: (state, { payload }) => {
             state = {
-                cat: {
-                    ...state.cat,
-                    foodLevel: payload,
-                },
+                ...state,
+                foodLevel: payload,
             };
 
             return state;
         },
         setHealthLevel: (state, { payload }) => {
             state = {
-                cat: { ...state.cat, healthLevel: payload },
+                ...state,
+                healthLevel: payload,
             };
 
             return state;
         },
         setMoodLevel: (state, { payload }) => {
             state = {
-                cat: { ...state.cat, moodLevel: payload },
+                ...state,
+                moodLevel: payload,
+            };
+
+            return state;
+        },
+        setDigestionLevel: (state, { payload }) => {
+            state = {
+                ...state,
+                digestionLevel: payload,
             };
 
             return state;
@@ -56,6 +64,11 @@ const reducer = createSlice({
     },
 });
 
-export const { createCat, setFoodLevel, setHealthLevel, setMoodLevel } =
-    reducer.actions;
+export const {
+    createCat,
+    setFoodLevel,
+    setHealthLevel,
+    setMoodLevel,
+    setDigestionLevel,
+} = reducer.actions;
 export const catReducer = reducer.reducer;

@@ -6,6 +6,7 @@ import {
     setFoodLevel,
     setHealthLevel,
     setMoodLevel,
+    setDigestionLevel,
 } from './redux/reducers/cat.reducer';
 
 import { ThemeProvider, createTheme } from '@mui/material';
@@ -22,14 +23,15 @@ const darkTheme = createTheme({
 let startGame;
 
 const App = () => {
-    const { foodLevel, healthLevel, moodLevel } = useSelector(
-        (state) => state.cat.cat
+    const { foodLevel, healthLevel, moodLevel, digestionLevel } = useSelector(
+        (state) => state.cat
     );
     const dispatch = useDispatch();
 
     const currentFood = useRefCreate(foodLevel);
     const currentHealth = useRefCreate(healthLevel);
     const currentMood = useRefCreate(moodLevel);
+    const currentDigestion = useRefCreate(digestionLevel);
 
     const [intervalId, setIntervalId] = useState(0);
 
@@ -41,6 +43,7 @@ const App = () => {
         startGame = setInterval(() => {
             if (!checkZeroFoodLevel()) {
                 dispatch(setFoodLevel(currentFood.current - 1));
+
                 if (currentFood.current > 50 && currentHealth.current < 100) {
                     dispatch(
                         setHealthLevel(
@@ -53,6 +56,15 @@ const App = () => {
             } else {
                 dispatch(setHealthLevel(currentHealth.current - 1));
             }
+
+            dispatch(
+                setDigestionLevel(
+                    currentDigestion.current > 0
+                        ? currentDigestion.current - 1
+                        : currentDigestion.current
+                )
+            );
+
             dispatch(setMoodLevel(currentMood.current - 5));
         }, 1000);
 
@@ -69,6 +81,14 @@ const App = () => {
                 currentFood.current + 5 > 100
                     ? (currentFood.current = 100)
                     : currentFood.current + 5
+            )
+        );
+
+        dispatch(
+            setDigestionLevel(
+                currentDigestion.current <= 0
+                    ? (currentDigestion.current = 30)
+                    : currentDigestion.current
             )
         );
     };

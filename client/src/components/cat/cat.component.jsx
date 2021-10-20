@@ -25,13 +25,18 @@ import { useStyles } from './cat.styles';
 
 const Cat = ({ feed, petCat }) => {
     const classes = useStyles();
-    const { name, img, foodLevel, healthLevel, moodLevel } = useSelector(
-        (state) => state.cat.cat
+    const { id, name, img, foodLevel, healthLevel, moodLevel, digestionLevel } =
+        useSelector((state) => state.cat);
+
+    const { toilet_full, toilet_empty, toilet_used } = useSelector(
+        (state) => state.toilet
     );
 
+    console.log('cat: ', id);
     const currentFood = useRefCreate(foodLevel);
     const currentHealth = useRefCreate(healthLevel);
     const currentMood = useRefCreate(moodLevel);
+    const currentDigestion = useRefCreate(digestionLevel);
 
     const [warning, setWarning] = useState('');
 
@@ -78,15 +83,26 @@ const Cat = ({ feed, petCat }) => {
                     <CardContent>
                         <Typography variant="h4">{name}</Typography>
                         {currentHealth.current !== 0 ? (
-                            <img
-                                src={`https://komornyi.space/static/img/cat_project/img/cats/${
-                                    currentMood.current > 50
-                                        ? img
-                                        : 'sad_' + img
-                                }.png`}
-                                width="100%"
-                                alt={name}
-                            />
+                            <>
+                                <img
+                                    src={`https://komornyi.space/static/img/cat_project/img/cats/${
+                                        currentMood.current > 50
+                                            ? img
+                                            : 'sad_' + img
+                                    }.png`}
+                                    width="100%"
+                                    alt={name}
+                                />
+                                <img
+                                    src={`https://komornyi.space/static/img/cat_project/img/cats/${
+                                        currentDigestion.current <= 1
+                                            ? toilet_full
+                                            : toilet_empty
+                                    }.png`}
+                                    width="100%"
+                                    alt=""
+                                />
+                            </>
                         ) : (
                             <img src={TombStone} width="100%" alt={name} />
                         )}

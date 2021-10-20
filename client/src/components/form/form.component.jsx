@@ -16,15 +16,16 @@ import {
     Radio,
     Typography,
 } from '@mui/material';
+import { generateID } from '../../helpers/idGenerator.helper';
 
 const Form = ({ tick }) => {
-    const [cat, setCat] = useState({ name: '', img: 'black' });
+    const [cat, setCat] = useState({ id: '', name: '', img: 'black' });
     const dispatch = useDispatch();
 
     const handleChange = (e) => {
         const { name, value } = e.target;
 
-        setCat({ ...cat, [name]: value });
+        setCat({ ...cat, id: generateID(), [name]: value });
     };
 
     const startGameHandler = () => {
