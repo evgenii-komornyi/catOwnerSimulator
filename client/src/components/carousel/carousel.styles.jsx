@@ -4,8 +4,8 @@ export const useStyles = makeStyles({
     carousel: {
         padding: '5px',
 
-        '& .owl-item.active.center': {
-            border: '5px solid white',
+        '& .owl-item.active.center img': {
+            border: '10px solid white',
         },
     },
 });

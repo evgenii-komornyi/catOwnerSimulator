@@ -48,24 +48,23 @@ const Carousel = memo(
             >
                 {cats.map((cat, key) => (
                     <Card
-                        variant="outlined"
+                        variant="elevation"
                         className="item"
+                        sx={{ width: '250px', mr: 'auto', ml: 'auto' }}
                         key={key}
                         data-img={cat.img}
                         onClick={(e) => {
                             clickHandler(e, key);
                         }}
                     >
-                        <CardMedia
-                            sx={{
-                                ml: 'auto',
-                                mr: 'auto',
-                            }}
-                            component="img"
-                            image={`https://komornyi.space/static/img/cat_project/img/cats/${cat.img}.png`}
-                            data-img={cat.img}
-                            alt={cat.color}
-                        />
+                        <CardContent>
+                            <img
+                                style={{ width: '100%' }}
+                                src={`https://komornyi.space/static/img/cat_project/img/cats/${cat.img}.png`}
+                                data-img={cat.img}
+                                alt={cat.color}
+                            />
+                        </CardContent>
                     </Card>
                 ))}
             </OwlCarousel>
