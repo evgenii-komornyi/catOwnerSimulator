@@ -1,0 +1,10 @@
+[
+    { "color": "Black", "img": "black", "catBio": "" },
+    { "color": "BlackNWhite", "img": "blackwhite", "catBio": "" },
+    { "color": "Brown", "img": "brown", "catBio": "" },
+    { "color": "Grey", "img": "grey", "catBio": "" },
+    { "color": "Point", "img": "point", "catBio": "" },
+    { "color": "Red point", "img": "redpoint", "catBio": "" },
+    { "color": "Three color", "img": "tricolor", "catBio": "" },
+    { "color": "White", "img": "white", "catBio": "" }
+]
