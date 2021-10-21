@@ -15,6 +15,7 @@ import { ThemeProvider, createTheme } from '@mui/material';
 import { CssBaseline } from '@mui/material';
 
 import MainPage from './pages/main.page';
+import WhatNew from './components/whatNew/whatNew.component';
 
 const darkTheme = createTheme({
     palette: {
@@ -107,6 +108,7 @@ const App = () => {
         <ThemeProvider theme={darkTheme}>
             <CssBaseline />
             <MainPage tick={tick} feed={feed} petCat={petCat} />
+            <WhatNew />
         </ThemeProvider>
     );
 };

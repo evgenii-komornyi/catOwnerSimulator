@@ -45,10 +45,13 @@ const Cat = ({ feed, petCat }) => {
     const audioRef = useRef();
 
     const [audio, setAudio] = useState('');
+    const [gif, setGif] = useState('');
 
     useEffect(() => {
         if (currentDigestion.current <= 1) {
             setAudio('poo');
+            setGif('use_toilet');
+
             if (audioRef.current) {
                 audioRef.current.load();
                 const playPromise = audioRef.current.play();
@@ -62,9 +65,11 @@ const Cat = ({ feed, petCat }) => {
                         });
                 }
             }
-        } else {
-            setAudio('');
         }
+        audioRef.current.addEventListener('ended', () => {
+            setGif('');
+            setAudio('');
+        });
     }, [audio, currentDigestion.current]);
     const [warning, setWarning] = useState('');
 
@@ -121,11 +126,19 @@ const Cat = ({ feed, petCat }) => {
                                     width="100%"
                                     alt={name}
                                 />
-                                <img
-                                    src={`https://komornyi.space/static/img/cat_project/img/cats/${toilet_img}.png`}
-                                    width="100%"
-                                    alt=""
-                                />
+                                {gif === '' ? (
+                                    <img
+                                        src={`https://komornyi.space/static/img/cat_project/img/cats/${toilet_img}.png`}
+                                        width="100%"
+                                        alt=""
+                                    />
+                                ) : (
+                                    <img
+                                        src={`https://komornyi.space/static/img/cat_project/img/cats/actions/${gif}.gif`}
+                                        width="100%"
+                                        alt=""
+                                    />
+                                )}
                             </>
                         ) : (
                             <img src={TombStone} width="100%" alt={name} />
