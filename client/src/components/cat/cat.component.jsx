@@ -47,13 +47,17 @@ const Cat = ({ feed, petCat }) => {
     const [audio, setAudio] = useState('');
     const [gif, setGif] = useState('');
 
+    const currentAudio = useRefCreate(audio);
+    const currentGif = useRefCreate(gif);
+
     useEffect(() => {
         if (currentDigestion.current <= 1) {
             setAudio('poo');
-            setGif('use_toilet');
 
             if (audioRef.current) {
                 audioRef.current.load();
+                setGif('use_toilet');
+
                 const playPromise = audioRef.current.play();
                 if (playPromise) {
                     playPromise
@@ -66,11 +70,13 @@ const Cat = ({ feed, petCat }) => {
                 }
             }
         }
-        audioRef.current.addEventListener('ended', () => {
-            setGif('');
-            setAudio('');
-        });
-    }, [audio, currentDigestion.current]);
+        currentAudio.current !== '' &&
+            document.querySelector('audio').addEventListener('ended', () => {
+                setAudio('');
+                setGif('');
+            });
+    }, [currentAudio, currentDigestion.current]);
+
     const [warning, setWarning] = useState('');
 
     const checkFoodLevel = () => {
@@ -134,7 +140,7 @@ const Cat = ({ feed, petCat }) => {
                                     />
                                 ) : (
                                     <img
-                                        src={`https://komornyi.space/static/img/cat_project/img/cats/actions/${gif}.gif`}
+                                        src={`https://komornyi.space/static/img/cat_project/img/cats/actions/${currentGif.current}.gif`}
                                         width="100%"
                                         alt=""
                                     />
@@ -263,12 +269,14 @@ const Cat = ({ feed, petCat }) => {
                     <Typography variant="h6">{warning}</Typography>
                 )}
             </Grid>
-            <audio ref={audioRef}>
-                <source
-                    src={`https://komornyi.space/static/img/cat_project/audio/${audio}.mp3`}
-                    type="audio/mpeg"
-                />
-            </audio>
+            {currentAudio.current !== '' && (
+                <audio ref={audioRef}>
+                    <source
+                        src={`https://komornyi.space/static/img/cat_project/audio/${currentAudio.current}.mp3`}
+                        type="audio/mpeg"
+                    />
+                </audio>
+            )}
         </Grid>
     );
 };
