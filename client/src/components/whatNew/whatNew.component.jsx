@@ -7,6 +7,7 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 
 import data from './news.json';
+import { Typography } from '@mui/material';
 
 export default function WhatNew() {
     const [open, setOpen] = React.useState(false);
@@ -30,6 +31,8 @@ export default function WhatNew() {
         }
     }, [open]);
 
+    const sortedData = data.sort((a, b) => new Date(b.date) - new Date(a.date));
+
     return (
         <div>
             <Button
@@ -46,17 +49,21 @@ export default function WhatNew() {
                 aria-labelledby="scroll-dialog-title"
                 aria-describedby="scroll-dialog-description"
             >
-                <DialogTitle id="scroll-dialog-title">Subscribe</DialogTitle>
+                <DialogTitle id="scroll-dialog-title">What is new?</DialogTitle>
                 <DialogContent dividers={scroll === 'paper'}>
                     <DialogContentText
                         id="scroll-dialog-description"
                         ref={descriptionElementRef}
                         tabIndex={-1}
                     >
-                        {data.map((n, i) => (
-                            <p key={i}>
-                                {n.date} {n.news}
-                            </p>
+                        {sortedData.map((n, i) => (
+                            <div key={i}>
+                                <Typography variant="caption">
+                                    {' '}
+                                    {n.date}{' '}
+                                </Typography>
+                                <Typography paragraph>{n.news}</Typography>
+                            </div>
                         ))}
                     </DialogContentText>
                 </DialogContent>

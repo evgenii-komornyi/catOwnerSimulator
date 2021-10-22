@@ -108,7 +108,7 @@ const App = () => {
         <ThemeProvider theme={darkTheme}>
             <CssBaseline />
             <MainPage tick={tick} feed={feed} petCat={petCat} />
-            {/* <WhatNew /> */}
+            <WhatNew />
         </ThemeProvider>
     );
 };
