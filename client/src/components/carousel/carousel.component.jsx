@@ -1,13 +1,9 @@
 import React, { forwardRef, memo } from 'react';
+
 import OwlCarousel from 'react-owl-carousel';
-import {
-    Card,
-    CardHeader,
-    CardMedia,
-    CardContent,
-    CardActions,
-    Typography,
-} from '@mui/material';
+import { Card, CardContent } from '@mui/material';
+
+import Buttons from './buttons.component';
 
 import 'owl.carousel/dist/assets/owl.carousel.css';
 import 'owl.carousel/dist/assets/owl.theme.green.css';
@@ -16,7 +12,7 @@ import cats from './cats.json';
 import { useStyles } from './carousel.styles';
 
 const Carousel = memo(
-    forwardRef(({ clickHandler }, ref) => {
+    forwardRef(({ goToSlide, setCat }, ref) => {
         const classes = useStyles();
 
         const responsive = {
@@ -40,34 +36,49 @@ const Carousel = memo(
             },
         };
 
+        const events = {
+            onDragged: function (event) {
+                goToSlide(event, event.item.index, null);
+            },
+        };
+
         return (
-            <OwlCarousel
-                responsive={responsive}
-                ref={ref}
-                className={`${classes.carousel} owl-theme`}
-            >
-                {cats.map((cat, key) => (
-                    <Card
-                        variant="elevation"
-                        className="item"
-                        sx={{ width: '250px', mr: 'auto', ml: 'auto' }}
-                        key={key}
-                        data-img={cat.img}
-                        onClick={(e) => {
-                            clickHandler(e, key);
-                        }}
-                    >
-                        <CardContent>
-                            <img
-                                style={{ width: '100%' }}
-                                src={`https://komornyi.space/static/img/cat_project/img/cats/${cat.img}.png`}
-                                data-img={cat.img}
-                                alt={cat.color}
-                            />
-                        </CardContent>
-                    </Card>
-                ))}
-            </OwlCarousel>
+            <>
+                <OwlCarousel
+                    responsive={responsive}
+                    ref={ref}
+                    className={`${classes.carousel} owl-theme`}
+                    {...events}
+                >
+                    {cats.map((cat, index) => (
+                        <Card
+                            variant="elevation"
+                            className="item"
+                            sx={{ width: '250px', mr: 'auto', ml: 'auto' }}
+                            key={index}
+                            data-index={index}
+                            data-img={cat.img}
+                            onClick={(e) => {
+                                goToSlide(null, index, e);
+                            }}
+                        >
+                            <CardContent>
+                                <img
+                                    style={{ width: '100%' }}
+                                    src={`${process.env.REACT_APP_HOST_IMG_URL}/cats/${cat.img}.png`}
+                                    data-img={cat.img}
+                                    alt={cat.color}
+                                />
+                            </CardContent>
+                        </Card>
+                    ))}
+                </OwlCarousel>
+                <Buttons
+                    carouselRef={ref}
+                    setCat={setCat}
+                    lastCat={cats.length - 1}
+                />
+            </>
         );
     })
 );

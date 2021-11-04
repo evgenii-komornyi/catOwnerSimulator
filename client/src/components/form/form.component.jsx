@@ -1,84 +1,60 @@
-import React, { useCallback, useRef, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { createCat } from '../../redux/reducers/cat.reducer';
-import { setToilet } from '../../redux/reducers/toilet.reducer';
+import React, { useCallback, useRef } from 'react';
 
-import {
-    Grid,
-    Card,
-    CardContent,
-    CardActions,
-    Button,
-    TextField,
-    Typography,
-} from '@mui/material';
+import { Grid, TextField } from '@mui/material';
 
-import { generateID } from '../../helpers/idGenerator.helper';
 import Carousel from '../carousel/carousel.component';
+import { useDispatch } from 'react-redux';
+import { setActiveIndex } from '../../redux/reducers/activeIndex.reducer';
 
-const Form = ({ tick }) => {
-    const [cat, setCat] = useState({ id: '', name: '', img: 'black' });
-    const dispatch = useDispatch();
-
+const Form = ({ cat, setCat, handleChange }) => {
     const carouselRef = useRef(null);
 
-    const handleChange = useCallback((e) => {
-        const { value } = e.target;
+    const dispatch = useDispatch();
 
-        setCat((prevCat) => ({ ...prevCat, name: value }));
-    }, []);
+    const changeCatOnClick = useCallback(
+        (e, index, clickedTarget) => {
+            carouselRef.current.to(index, 300);
+            if (e !== null) {
+                const items = [
+                    ...e.currentTarget.children[0].children[0].children,
+                ];
 
-    const changeCatOnClick = useCallback((e, key) => {
-        carouselRef.current.to(key, 300);
-
-        setCat((prevCat) => ({ ...prevCat, img: e.target.dataset.img }));
-    }, []);
-
-    const startGameHandler = () => {
-        if (cat.name === '') {
-            alert('Name cannot be empty');
-        } else {
-            dispatch(createCat({ ...cat, id: generateID() }));
-            dispatch(setToilet({ id: generateID() }));
-            tick();
-        }
-    };
+                items.forEach((v, _) => {
+                    if (v.classList.contains('center')) {
+                        setCat((prevState) => ({
+                            ...prevState,
+                            img: v.children[0].dataset.img,
+                        }));
+                    }
+                });
+            }
+            if (clickedTarget !== null) {
+                setCat((prevState) => ({
+                    ...prevState,
+                    img: clickedTarget.target.dataset.img,
+                }));
+            }
+            dispatch(setActiveIndex(index));
+        },
+        [dispatch, setCat]
+    );
 
     return (
         <Grid container>
             <Grid item lg={12} sx={{ textAlign: 'center' }}>
-                <Card variant="outlined" sx={{ mr: 'auto', ml: 'auto' }}>
-                    <CardContent>
-                        <Typography variant="h4" gutterBottom>
-                            Choose your cat
-                        </Typography>
-                        <Grid container>
-                            <Grid item lg={12}>
-                                <TextField
-                                    label="Cat name"
-                                    value={cat.name}
-                                    name="name"
-                                    onChange={handleChange}
-                                />
-                            </Grid>
-                            <Grid item lg={12} sx={{ mt: 2 }}>
-                                <Carousel
-                                    clickHandler={changeCatOnClick}
-                                    ref={carouselRef}
-                                />
-                            </Grid>
-                        </Grid>
-                    </CardContent>
-                    <CardActions>
-                        <Button
-                            variant="outlined"
-                            sx={{ mr: 'auto', ml: 'auto' }}
-                            onClick={startGameHandler}
-                        >
-                            adopt
-                        </Button>
-                    </CardActions>
-                </Card>
+                <TextField
+                    label="Cat name"
+                    value={cat.name}
+                    name="name"
+                    onChange={handleChange}
+                />
+                <Grid item lg={12} sx={{ mt: 2 }}>
+                    <Carousel
+                        goToSlide={changeCatOnClick}
+                        ref={carouselRef}
+                        setCat={setCat}
+                    />
+                </Grid>
             </Grid>
         </Grid>
     );

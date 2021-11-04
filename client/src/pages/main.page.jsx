@@ -2,15 +2,14 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 
 import { Container } from '@mui/material';
-import Form from '../components/form/form.component';
-import Cat from '../components/cat/cat.component';
+import Owner from '../components/owner/owner.component';
 
-const MainPage = ({ tick, feed, petCat }) => {
-    const { name } = useSelector((state) => state.cat);
+const MainPage = ({ tick }) => {
+    const { intervalId } = useSelector((state) => state.interval);
 
     return (
         <Container maxWidth="lg" sx={{ mt: 5 }}>
-            {!name ? <Form tick={tick} /> : <Cat feed={feed} petCat={petCat} />}
+            {intervalId !== 0 && <Owner />}
         </Container>
     );
 };

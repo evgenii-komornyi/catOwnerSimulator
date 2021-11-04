@@ -9,11 +9,11 @@ import {
     DialogContentText,
     DialogTitle,
 } from '@mui/material';
-import { Announcement } from '@mui/icons-material';
+import HelpIcon from '@mui/icons-material/Help';
 
-import data from './news.json';
+import data from './help.json';
 
-const WhatNew = () => {
+const Help = () => {
     const [open, setOpen] = useState(false);
     const [scroll] = useState('body');
 
@@ -35,12 +35,10 @@ const WhatNew = () => {
         }
     }, [open]);
 
-    const sortedData = data.sort((a, b) => new Date(b.date) - new Date(a.date));
-
     return (
         <div>
             <IconButton size="large" onClick={handleClickOpen} color="inherit">
-                <Announcement />
+                <HelpIcon />
             </IconButton>
 
             <Dialog
@@ -50,20 +48,20 @@ const WhatNew = () => {
                 aria-labelledby="scroll-dialog-title"
                 aria-describedby="scroll-dialog-description"
             >
-                <DialogTitle id="scroll-dialog-title">What is new?</DialogTitle>
+                <DialogTitle id="scroll-dialog-title">Help</DialogTitle>
                 <DialogContent dividers={scroll === 'paper'}>
                     <DialogContentText
                         id="scroll-dialog-description"
                         ref={descriptionElementRef}
                         tabIndex={-1}
                     >
-                        {sortedData.map((n, i) => (
+                        {data.map((h, i) => (
                             <div key={i}>
                                 <Typography variant="caption">
                                     {' '}
-                                    {n.date}{' '}
+                                    {h.date}{' '}
                                 </Typography>
-                                <Typography paragraph>{n.news}</Typography>
+                                <Typography paragraph>{h.news}</Typography>
                             </div>
                         ))}
                     </DialogContentText>
@@ -76,4 +74,4 @@ const WhatNew = () => {
     );
 };
 
-export default WhatNew;
+export default Help;

@@ -1,68 +1,50 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 import { useRefCreate } from '../../hooks/useRefCreate';
-
-import { motion } from 'framer-motion';
 
 import {
     Card,
     Grid,
-    CardHeader,
-    Avatar,
     CardContent,
+    LinearProgress,
     Typography,
-    CardActions,
-    Button,
 } from '@mui/material';
 
-import { clean } from '../../redux/reducers/toilet.reducer';
-
 import FullHeart from '../../icons/fullHeart.png';
-import BrokenHeart from '../../icons/broken-heart.png';
-import Fish from '../../icons/fish.png';
-import FishBones from '../../icons/fish-bone.png';
+import BrokenHeart from '../../icons/broken_heart.png';
+import FullFood from '../../icons/food_full.png';
+import EmptyFood from '../../icons/food_empty.png';
+import FullMood from '../../icons/mood_full.png';
+import EmptyMood from '../../icons/mood_empty.png';
+
 import TombStone from '../../icons/tombstone.png';
 
 import { useStyles } from './cat.styles';
 
-const Cat = ({ feed, petCat }) => {
-    const classes = useStyles();
-    const dispatch = useDispatch();
+const Cat = ({ feed, petCat, cat }) => {
+    const [isVisible, setIsVisible] = useState(false);
 
-    const { name, img, foodLevel, healthLevel, moodLevel, digestionLevel } =
-        useSelector((state) => state.cat);
-
-    const { toilet_img } = useSelector((state) => state.toilet);
-
-    const catId = useSelector((state) => state.cat.id);
-    const toiletId = useSelector((state) => state.toilet.id);
-
-    const currentFood = useRefCreate(foodLevel);
-    const currentHealth = useRefCreate(healthLevel);
-    const currentMood = useRefCreate(moodLevel);
-    const currentDigestion = useRefCreate(digestionLevel);
+    const classes = useStyles(isVisible);
 
     const audioRef = useRef();
 
     const [audio, setAudio] = useState('');
-    const [gif, setGif] = useState('');
 
     const currentAudio = useRefCreate(audio);
-    const currentGif = useRefCreate(gif);
 
     useEffect(() => {
-        if (currentDigestion.current <= 1) {
+        const audioElement = audioRef.current;
+
+        if (cat.digestionLevel <= 1) {
             setAudio('poo');
 
             if (audioRef.current) {
-                audioRef.current.load();
-                setGif('use_toilet');
+                audioElement.load();
 
-                const playPromise = audioRef.current.play();
+                const playPromise = audioElement.play();
                 if (playPromise) {
                     playPromise
                         .then((_) => {
-                            return audioRef.current.play();
+                            return audioElement.play();
                         })
                         .catch((error) => {
                             console.log(error.message);
@@ -71,213 +53,196 @@ const Cat = ({ feed, petCat }) => {
             }
         }
         currentAudio.current !== '' &&
-            document.querySelector('audio').addEventListener('ended', () => {
+            audioElement.addEventListener('ended', () => {
                 setAudio('');
-                setGif('');
             });
-    }, [currentAudio, currentDigestion.current]);
-
-    const [warning, setWarning] = useState('');
-
-    const checkFoodLevel = () => {
-        switch (true) {
-            case currentFood.current >= 30 && currentFood.current <= 100:
-                return Fish;
-            case currentFood.current >= 0 && currentFood.current < 30:
-                return FishBones;
-            default:
-                break;
-        }
-    };
+    }, [currentAudio, cat.digestionLevel]);
 
     const checkHealthLevel = () => {
         switch (true) {
-            case currentHealth.current >= 30 && currentHealth.current <= 100:
+            case cat.healthLevel > 0 && cat.healthLevel <= 100:
                 return FullHeart;
-            case currentHealth.current >= 0 && currentHealth.current < 30:
+            case cat.healthLevel <= 0:
                 return BrokenHeart;
             default:
                 break;
         }
     };
 
-    const checkForWarnings = () => {
-        if (currentFood.current === 100) {
-            setWarning('Cat does not want to eat!');
-        } else if (currentHealth.current === 0) {
-            setWarning('You killed your cat :(');
-        } else {
-            setWarning('');
+    const checkFoodLevel = () => {
+        switch (true) {
+            case cat.foodLevel > 0 && cat.foodLevel <= 100:
+                return FullFood;
+            case cat.foodLevel <= 0:
+                return EmptyFood;
+            default:
+                break;
         }
     };
 
-    useEffect(() => {
-        checkForWarnings();
-    }, [currentFood.current, currentHealth.current]);
+    const checkMoodLevel = () => {
+        switch (true) {
+            case cat.moodLevel !== 0 && cat.moodLevel <= 100:
+                return FullMood;
+            case cat.moodLevel === 0:
+                return EmptyMood;
+            default:
+                break;
+        }
+    };
 
     return (
-        <Grid container>
-            <Grid item lg={2} sx={{ textAlign: 'center' }}>
-                <Card variant="outlined">
-                    <CardContent>
-                        <Typography variant="h4">{name}</Typography>
-                        {currentHealth.current !== 0 ? (
-                            <>
-                                <img
-                                    src={`https://komornyi.space/static/img/cat_project/img/cats/${
-                                        currentMood.current > 50
-                                            ? img
-                                            : 'sad_' + img
-                                    }.png`}
-                                    width="100%"
-                                    alt={name}
-                                />
-                                {gif === '' ? (
+        <>
+            <Card
+                variant="elevation"
+                sx={{ height: 315, p: 0 }}
+                onMouseOver={() => setIsVisible(true)}
+                onMouseLeave={() => setIsVisible(false)}
+            >
+                {cat.healthLevel <= 0 ? (
+                    <img src={TombStone} width="100%" alt={cat.name} />
+                ) : (
+                    <>
+                        <Typography variant="h6">{cat.name}</Typography>
+                        <CardContent>
+                            <Grid container item lg={12} spacing={2}>
+                                <Grid item lg={12}>
                                     <img
-                                        src={`https://komornyi.space/static/img/cat_project/img/cats/${toilet_img}.png`}
-                                        width="100%"
-                                        alt=""
+                                        alt={cat.name}
+                                        src={`${
+                                            process.env.REACT_APP_HOST_IMG_URL
+                                        }/cats/${
+                                            cat.moodLevel !== 0
+                                                ? cat.img
+                                                : 'sad_' + cat.img
+                                        }.png`}
+                                        width="70%"
+                                        className={classes.catAvatar}
                                     />
-                                ) : (
-                                    <img
-                                        src={`https://komornyi.space/static/img/cat_project/img/cats/actions/${currentGif.current}.gif`}
-                                        width="100%"
-                                        alt=""
-                                    />
-                                )}
-                            </>
-                        ) : (
-                            <img src={TombStone} width="100%" alt={name} />
-                        )}
-                    </CardContent>
-                </Card>
-            </Grid>
-            <Grid item lg={10}>
-                <Card variant="outlined">
-                    <CardHeader
-                        avatar={
-                            <Avatar sx={{ backgroundColor: 'grey' }}>
-                                {name[0]}
-                            </Avatar>
-                        }
-                        title={name}
-                    />
-                    <CardContent>
-                        <Grid container item lg={12} spacing={2}>
-                            <Grid item lg={2} sx={{ textAlign: 'right' }}>
-                                <motion.img
-                                    src={checkHealthLevel()}
-                                    alt=""
-                                    animate={{
-                                        opacity:
-                                            currentHealth.current < 20 &&
-                                            currentHealth.current !== 0
-                                                ? [1, 0, 1, 0, 1]
-                                                : [1, 1],
-                                    }}
-                                    transition={{
-                                        duration: 1,
-                                        ease: 'easeInOut',
-                                        times: [0, 0.2, 0.5, 0.8, 1],
-                                        loop: Infinity,
-                                        repeatDelay: 1,
-                                    }}
-                                    className={classes.healthIcon}
-                                />
-                            </Grid>
-                            <Grid
-                                item
-                                lg={10}
-                                sx={{
-                                    textAlign: 'center',
-                                }}
-                            >
-                                {currentHealth.current > 0 && (
-                                    <div
-                                        style={{
-                                            width: `${currentHealth.current}%`,
-                                            height: '2px',
-                                            padding: '2px',
-                                            background: '#fff',
-                                        }}
-                                    />
-                                )}
-                            </Grid>
-                            <Grid item lg={2} sx={{ textAlign: 'right' }}>
-                                <motion.img
-                                    src={checkFoodLevel()}
-                                    alt=""
-                                    animate={{
-                                        opacity:
-                                            currentFood.current < 30 &&
-                                            currentFood.current !== 0
-                                                ? [1, 0, 1, 0, 1]
-                                                : [1, 1],
-                                    }}
-                                    transition={{
-                                        duration: 1,
-                                        ease: 'easeInOut',
-                                        times: [0, 0.2, 0.5, 0.8, 1],
-                                        loop: Infinity,
-                                        repeatDelay: 1,
-                                    }}
-                                    className={classes.foodIcon}
-                                />
-                            </Grid>
-                            <Grid
-                                item
-                                lg={10}
-                                sx={{
-                                    textAlign: 'center',
-                                }}
-                            >
-                                {currentFood.current > 0 && (
-                                    <div
-                                        style={{
-                                            width: `${currentFood.current}%`,
-                                            height: '2px',
-                                            padding: '2px',
-                                            background: '#fff',
-                                        }}
-                                    />
-                                )}
-                            </Grid>
-                        </Grid>
-                    </CardContent>
-                    <CardActions>
-                        {currentHealth.current !== 0 && (
-                            <>
-                                <Button variant="outlined" onClick={feed}>
-                                    Feed {name}
-                                </Button>
-                                <Button variant="outlined" onClick={petCat}>
-                                    Pet {name}
-                                </Button>
-                                <Button
-                                    variant="outlined"
-                                    onClick={() => dispatch(clean())}
+                                </Grid>
+                                <Grid
+                                    item
+                                    lg={2}
+                                    sx={{ textAlign: 'right', mt: -1 }}
                                 >
-                                    Clean toilet{' '}
-                                </Button>
-                            </>
-                        )}
-                    </CardActions>
-                </Card>
-            </Grid>
-            <Grid item lg={12}>
-                {warning !== '' && (
-                    <Typography variant="h6">{warning}</Typography>
+                                    <img
+                                        src={checkHealthLevel()}
+                                        alt=""
+                                        className={classes.healthIcon}
+                                    />
+                                </Grid>
+                                <Grid
+                                    item
+                                    lg={10}
+                                    sx={{
+                                        textAlign: 'center',
+                                    }}
+                                >
+                                    {cat.healthLevel > 0 && (
+                                        <LinearProgress
+                                            variant="determinate"
+                                            value={Math.ceil(
+                                                (cat.healthLevel * 100) / 100
+                                            )}
+                                            color={`${
+                                                cat.healthLevel < 30
+                                                    ? 'error'
+                                                    : 'primary'
+                                            }`}
+                                            className={classes.progressBar}
+                                        />
+                                    )}
+                                </Grid>
+                                <Grid
+                                    item
+                                    lg={2}
+                                    sx={{ textAlign: 'right', mt: -1 }}
+                                >
+                                    <img
+                                        src={checkFoodLevel()}
+                                        alt=""
+                                        className={classes.foodIcon}
+                                    />
+                                </Grid>
+                                <Grid
+                                    item
+                                    lg={10}
+                                    sx={{
+                                        textAlign: 'center',
+                                    }}
+                                >
+                                    <LinearProgress
+                                        variant="determinate"
+                                        color={`${
+                                            cat.foodLevel < 30
+                                                ? 'error'
+                                                : 'primary'
+                                        }`}
+                                        value={Math.ceil(
+                                            (cat.foodLevel * 100) / 100
+                                        )}
+                                        className={classes.progressBar}
+                                    />
+                                </Grid>
+                                <Grid
+                                    item
+                                    lg={2}
+                                    sx={{ textAlign: 'right', mt: -1 }}
+                                >
+                                    <img
+                                        src={checkMoodLevel()}
+                                        alt=""
+                                        className={classes.moodIcon}
+                                    />
+                                </Grid>
+                                <Grid
+                                    item
+                                    lg={10}
+                                    sx={{
+                                        textAlign: 'center',
+                                    }}
+                                >
+                                    <LinearProgress
+                                        variant="determinate"
+                                        color={`${
+                                            cat.moodLevel < 30
+                                                ? 'error'
+                                                : 'primary'
+                                        }`}
+                                        value={Math.ceil(
+                                            (cat.moodLevel * 100) / 100
+                                        )}
+                                        className={classes.progressBar}
+                                    />
+                                </Grid>
+                            </Grid>
+                        </CardContent>
+                        <Grid container className={classes.actions}>
+                            {[0, 1, 2, 3, 4, 5, 6, 7, 8].map((column) => (
+                                <Grid item lg={4} key={column}>
+                                    <Card
+                                        variant="outlined"
+                                        sx={{
+                                            textAlign: 'center',
+                                        }}
+                                    >
+                                        <CardContent>{column}</CardContent>
+                                    </Card>
+                                </Grid>
+                            ))}
+                        </Grid>
+                    </>
                 )}
-            </Grid>
+            </Card>
             {currentAudio.current !== '' && (
                 <audio ref={audioRef}>
                     <source
-                        src={`https://komornyi.space/static/img/cat_project/audio/${currentAudio.current}.mp3`}
+                        src={`${process.env.REACT_APP_HOST_AUDIO_URL}/${currentAudio.current}.mp3`}
                         type="audio/mpeg"
                     />
                 </audio>
             )}
-        </Grid>
+        </>
     );
 };
 

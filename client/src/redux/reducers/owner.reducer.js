@@ -1,35 +1,60 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { generateID } from '../../helpers/idGenerator.helper';
 
 const initialState = {
-    id: null,
-    name: null,
-    money: 100.0,
+    id: generateID(),
+    happyCatCoins: 100,
     cats: [],
-    toilets: [],
-    items: [],
 };
 
 const reducer = createSlice({
     name: 'owner',
     initialState,
     reducers: {
-        setOwner: (state, { payload }) => {},
-        feedCat: (state, { payload }) => {},
-        petCat: (state, { payload }) => {},
-        cleanToilet: (state, { payload }) => {},
-        addCat: (state, { payload }) => {},
-        addToilet: (state, { payload }) => {},
-        addItem: (state, { payload }) => {},
+        addCat: (state, { payload }) => {
+            state = {
+                ...state,
+                cats: [...state.cats, payload],
+            };
+
+            return state;
+        },
+        setFoodLevel: (state, { payload: { id, newFoodLevel } }) => {
+            let cat = state.cats.find((cat) => cat.id === id);
+
+            cat.foodLevel = newFoodLevel;
+
+            return state;
+        },
+        setHealthLevel: (state, { payload: { id, newHealthLevel } }) => {
+            const cat = state.cats.find((cat) => cat.id === id);
+
+            cat.healthLevel = newHealthLevel;
+
+            return state;
+        },
+        setMoodLevel: (state, { payload: { id, newMoodLevel } }) => {
+            const cat = state.cats.find((cat) => cat.id === id);
+
+            cat.moodLevel = newMoodLevel;
+
+            return state;
+        },
+        setDigestionLevel: (state, { payload: { id, newDigestionLevel } }) => {
+            const cat = state.cats.find((cat) => cat.id === id);
+
+            cat.digestionLevel = newDigestionLevel;
+
+            return state;
+        },
     },
 });
 
 export const {
-    setOwner,
-    feedCat,
-    petCat,
-    cleanToilet,
     addCat,
-    addToilet,
-    addItem,
+    setFoodLevel,
+    setHealthLevel,
+    setMoodLevel,
+    setDigestionLevel,
 } = reducer.actions;
 export const ownerReducer = reducer.reducer;

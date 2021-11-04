@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useRefCreate } from './hooks/useRefCreate';
 
@@ -7,15 +7,17 @@ import {
     setHealthLevel,
     setMoodLevel,
     setDigestionLevel,
-} from './redux/reducers/cat.reducer';
+} from './redux/reducers/owner.reducer';
 
-import { getShit } from './redux/reducers/toilet.reducer';
+import { setIntervalId } from './redux/reducers/interval.reducer';
+
+import Modal from './components/modal/modal.component';
 
 import { ThemeProvider, createTheme } from '@mui/material';
 import { CssBaseline } from '@mui/material';
 
+import Header from './components/header/header.component';
 import MainPage from './pages/main.page';
-import WhatNew from './components/whatNew/whatNew.component';
 
 const darkTheme = createTheme({
     palette: {
@@ -26,89 +28,109 @@ const darkTheme = createTheme({
 let startGame;
 
 const App = () => {
-    const { foodLevel, healthLevel, moodLevel, digestionLevel } = useSelector(
-        (state) => state.cat
-    );
+    const { cats } = useSelector((state) => state.owner);
+    const { intervalId } = useSelector((state) => state.interval);
+
     const dispatch = useDispatch();
 
-    const currentFood = useRefCreate(foodLevel);
-    const currentHealth = useRefCreate(healthLevel);
-    const currentMood = useRefCreate(moodLevel);
-    const currentDigestion = useRefCreate(digestionLevel);
+    const currentCats = useRefCreate(cats);
 
-    const [intervalId, setIntervalId] = useState(0);
-
-    const checkZeroFoodLevel = useCallback(() => {
-        return currentFood.current <= 0;
-    }, [currentFood]);
-
-    const tick = () => {
+    const startGameHandler = () => {
         startGame = setInterval(() => {
-            if (!checkZeroFoodLevel()) {
-                dispatch(setFoodLevel(currentFood.current - 1));
+            currentCats.current.length !== 0 &&
+                currentCats.current.map((cat) => {
+                    if (cat.foodLevel > 0) {
+                        if (cat.foodLevel > 50 && cat.healthLevel < 100) {
+                            dispatch(
+                                setHealthLevel({
+                                    id: cat.id,
+                                    newHealthLevel:
+                                        cat.healthLevel + 5 > 100
+                                            ? (cat.healthLevel = 100)
+                                            : cat.healthLevel + 5,
+                                })
+                            );
+                        }
 
-                if (currentFood.current > 50 && currentHealth.current < 100) {
+                        dispatch(
+                            setFoodLevel({
+                                id: cat.id,
+                                newFoodLevel:
+                                    cat.foodLevel - 1 < 0
+                                        ? 0
+                                        : cat.foodLevel - 1,
+                            })
+                        );
+                    } else {
+                        dispatch(
+                            setHealthLevel({
+                                id: cat.id,
+                                newHealthLevel:
+                                    cat.healthLevel - 1 < 0
+                                        ? 0
+                                        : cat.healthLevel - 1,
+                            })
+                        );
+                    }
                     dispatch(
-                        setHealthLevel(
-                            currentHealth.current + 5 > 100
-                                ? (currentHealth.current = 100)
-                                : currentHealth.current + 5
-                        )
+                        setDigestionLevel({
+                            id: cat.id,
+                            newDigestionLevel:
+                                cat.digestionLevel - 1 < 0
+                                    ? 0
+                                    : cat.digestionLevel - 1,
+                        })
                     );
-                }
-            } else {
-                dispatch(setHealthLevel(currentHealth.current - 1));
-            }
 
-            dispatch(
-                setDigestionLevel(
-                    currentDigestion.current > 0
-                        ? currentDigestion.current - 1
-                        : currentDigestion.current
-                )
-            );
-
-            if (currentDigestion.current === 1) {
-                dispatch(getShit(currentDigestion.current));
-            }
-
-            dispatch(setMoodLevel(currentMood.current - 5));
+                    // if (cat.digestionLevel === 1) {
+                    //     dispatch(getShit(cat.digestionLevel));
+                    // }
+                    dispatch(
+                        setMoodLevel({
+                            id: cat.id,
+                            newMoodLevel:
+                                cat.moodLevel - 5 < 0 ? 0 : cat.moodLevel - 5,
+                        })
+                    );
+                    return cat;
+                });
         }, 1000);
-
-        setIntervalId(startGame);
+        dispatch(setIntervalId(startGame));
     };
 
-    if (currentHealth.current === 0) {
+    const stopGameHandler = () => {
         clearInterval(intervalId);
-    }
-
-    const feed = () => {
-        dispatch(
-            setFoodLevel(
-                currentFood.current + 5 > 100
-                    ? (currentFood.current = 100)
-                    : currentFood.current + 5
-            )
-        );
-
-        dispatch(
-            setDigestionLevel(
-                currentDigestion.current <= 0
-                    ? (currentDigestion.current = 30)
-                    : currentDigestion.current
-            )
-        );
+        dispatch(setIntervalId(0));
     };
 
-    const petCat = () => {
-        dispatch(setMoodLevel(100));
-    };
+    // const feed = () => {
+    //     dispatch(
+    //         setFoodLevel(
+    //             currentFood.current + 5 > 100
+    //                 ? (currentFood.current = 100)
+    //                 : currentFood.current + 5
+    //         )
+    //     );
+
+    //     dispatch(
+    //         setDigestionLevel(
+    //             currentDigestion.current <= 0
+    //                 ? (currentDigestion.current = 30)
+    //                 : currentDigestion.current
+    //         )
+    //     );
+    // };
+
+    // const petCat = () => {
+    //     dispatch(setMoodLevel(100));
+    // };
 
     return (
         <ThemeProvider theme={darkTheme}>
             <CssBaseline />
-            <MainPage tick={tick} feed={feed} petCat={petCat} />
-            <WhatNew />
+            <Header startGame={startGameHandler} stopGame={stopGameHandler} />
+            <MainPage />
+            <Modal />
         </ThemeProvider>
     );
 };
