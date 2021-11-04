@@ -29,46 +29,8 @@ const reducer = createSlice({
 
             return state;
         },
-        setFoodLevel: (state, { payload }) => {
-            state = {
-                ...state,
-                foodLevel: payload,
-            };
-
-            return state;
-        },
-        setHealthLevel: (state, { payload }) => {
-            state = {
-                ...state,
-                healthLevel: payload,
-            };
-
-            return state;
-        },
-        setMoodLevel: (state, { payload }) => {
-            state = {
-                ...state,
-                moodLevel: payload,
-            };
-
-            return state;
-        },
-        setDigestionLevel: (state, { payload }) => {
-            state = {
-                ...state,
-                digestionLevel: payload,
-            };
-
-            return state;
-        },
     },
 });
 
-export const {
-    createCat,
-    setFoodLevel,
-    setHealthLevel,
-    setMoodLevel,
-    setDigestionLevel,
-} = reducer.actions;
+export const { createCat } = reducer.actions;
 export const catReducer = reducer.reducer;

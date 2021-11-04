@@ -1,12 +1,17 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useRefCreate } from '../../hooks/useRefCreate';
 
+import { useDispatch } from 'react-redux';
+
+import { feedCat, petCat } from '../../redux/reducers/owner.reducer';
+
 import {
     Card,
     Grid,
     CardContent,
     LinearProgress,
     Typography,
+    IconButton,
 } from '@mui/material';
 
 import FullHeart from '../../icons/fullHeart.png';
@@ -19,8 +24,11 @@ import EmptyMood from '../../icons/mood_empty.png';
 import TombStone from '../../icons/tombstone.png';
 
 import { useStyles } from './cat.styles';
+import { PanTool, SetMeal } from '@mui/icons-material';
 
-const Cat = ({ feed, petCat, cat }) => {
+const Cat = ({ cat }) => {
+    const dispatch = useDispatch();
+
     const [isVisible, setIsVisible] = useState(false);
 
     const classes = useStyles(isVisible);
@@ -218,18 +226,68 @@ const Cat = ({ feed, petCat, cat }) => {
                             </Grid>
                         </CardContent>
                         <Grid container className={classes.actions}>
-                            {[0, 1, 2, 3, 4, 5, 6, 7, 8].map((column) => (
-                                <Grid item lg={4} key={column}>
-                                    <Card
-                                        variant="outlined"
-                                        sx={{
-                                            textAlign: 'center',
-                                        }}
-                                    >
-                                        <CardContent>{column}</CardContent>
-                                    </Card>
-                                </Grid>
-                            ))}
+                            <Grid item lg={4}>
+                                <Card
+                                    variant="outlined"
+                                    sx={{
+                                        textAlign: 'center',
+                                    }}
+                                >
+                                    <CardContent>
+                                        <IconButton
+                                            color="success"
+                                            size="large"
+                                            aria-label="feed"
+                                            onClick={() =>
+                                                dispatch(
+                                                    feedCat({
+                                                        id: cat.id,
+                                                        newFoodLevel:
+                                                            cat.foodLevel + 5 >
+                                                            100
+                                                                ? 100
+                                                                : cat.foodLevel +
+                                                                  5,
+                                                    })
+                                                )
+                                            }
+                                        >
+                                            <SetMeal />
+                                        </IconButton>{' '}
+                                    </CardContent>
+                                </Card>
+                            </Grid>
+                            <Grid item lg={4}>
+                                <Card
+                                    variant="outlined"
+                                    sx={{
+                                        textAlign: 'center',
+                                    }}
+                                >
+                                    <CardContent>
+                                        <IconButton
+                                            color="primary"
+                                            size="large"
+                                            aria-label="feed"
+                                            onClick={() =>
+                                                dispatch(
+                                                    petCat({
+                                                        id: cat.id,
+                                                        newMoodLevel:
+                                                            cat.moodLevel + 10 >
+                                                            100
+                                                                ? 100
+                                                                : cat.moodLevel +
+                                                                  10,
+                                                    })
+                                                )
+                                            }
+                                        >
+                                            <PanTool />
+                                        </IconButton>{' '}
+                                    </CardContent>
+                                </Card>
+                            </Grid>
                         </Grid>
                     </>
                 )}

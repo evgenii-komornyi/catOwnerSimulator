@@ -46,7 +46,7 @@ const App = () => {
                                     id: cat.id,
                                     newHealthLevel:
                                         cat.healthLevel + 5 > 100
-                                            ? (cat.healthLevel = 100)
+                                            ? 100
                                             : cat.healthLevel + 5,
                                 })
                             );
