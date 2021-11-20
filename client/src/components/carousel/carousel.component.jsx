@@ -8,11 +8,10 @@ import Buttons from './buttons.component';
 import 'owl.carousel/dist/assets/owl.carousel.css';
 import 'owl.carousel/dist/assets/owl.theme.green.css';
 
-import cats from './cats.json';
 import { useStyles } from './carousel.styles';
 
 const Carousel = memo(
-    forwardRef(({ goToSlide, setCat }, ref) => {
+    forwardRef(({ goToSlide, setCat, slides, category }, ref) => {
         const classes = useStyles();
 
         const responsive = {
@@ -50,14 +49,14 @@ const Carousel = memo(
                     className={`${classes.carousel} owl-theme`}
                     {...events}
                 >
-                    {cats.map((cat, index) => (
+                    {slides.map((slide, index) => (
                         <Card
                             variant="elevation"
                             className="item"
                             sx={{ width: '250px', mr: 'auto', ml: 'auto' }}
                             key={index}
                             data-index={index}
-                            data-img={cat.img}
+                            data-img={slide.img}
                             onClick={(e) => {
                                 goToSlide(null, index, e);
                             }}
@@ -65,9 +64,9 @@ const Carousel = memo(
                             <CardContent>
                                 <img
                                     style={{ width: '100%' }}
-                                    src={`${process.env.REACT_APP_HOST_IMG_URL}/cats/${cat.img}.png`}
-                                    data-img={cat.img}
-                                    alt={cat.color}
+                                    src={`${process.env.REACT_APP_HOST_IMG_URL}/${category}/${slide.img}.png`}
+                                    data-img={slide.img}
+                                    alt={slide.color}
                                 />
                             </CardContent>
                         </Card>
@@ -76,7 +75,7 @@ const Carousel = memo(
                 <Buttons
                     carouselRef={ref}
                     setCat={setCat}
-                    lastCat={cats.length - 1}
+                    lastItem={slides.length - 1}
                 />
             </>
         );

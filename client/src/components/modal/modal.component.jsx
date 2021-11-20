@@ -8,6 +8,13 @@ import { setIsOpen } from '../../redux/reducers/modal.reducer';
 import { generateID } from '../../helpers/idGenerator.helper';
 
 import {
+    MAX_HEALTH_LEVEL,
+    MAX_FOOD_LEVEL,
+    MAX_MOOD_LEVEL,
+    MAX_DIGESTION_LEVEL,
+} from '../../helpers/max_values';
+
+import {
     Button,
     Dialog,
     AppBar,
@@ -26,11 +33,6 @@ import { setActiveIndex } from '../../redux/reducers/activeIndex.reducer';
 const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
 });
-
-const MAX_FOOD_LEVEL = 100;
-const MAX_HEALTH_LEVEL = 100;
-const MAX_MOOD_LEVEL = 100;
-const MAX_DIGESTION_LEVEL = 30;
 
 const Modal = () => {
     const { isOpen } = useSelector((state) => state.modal);
@@ -73,12 +75,13 @@ const Modal = () => {
     };
 
     return (
-        <div>
+        <>
             <Dialog
                 fullScreen
                 open={isOpen}
                 onClose={() => dispatch(setIsOpen())}
                 TransitionComponent={Transition}
+                onKeyPress={(e) => e.key === 'Enter' && startGameHandler()}
             >
                 <AppBar sx={{ position: 'relative' }}>
                     <Toolbar>
@@ -108,7 +111,7 @@ const Modal = () => {
                 </AppBar>
                 <Container maxWidth="lg">
                     <Grid container>
-                        <Grid item lg={12}>
+                        <Grid item xl={12} lg={12}>
                             <DialogContent>
                                 <Form
                                     cat={cat}
@@ -120,7 +123,7 @@ const Modal = () => {
                     </Grid>
                 </Container>
             </Dialog>
-        </div>
+        </>
     );
 };
 

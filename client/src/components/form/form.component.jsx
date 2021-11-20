@@ -6,6 +6,8 @@ import Carousel from '../carousel/carousel.component';
 import { useDispatch } from 'react-redux';
 import { setActiveIndex } from '../../redux/reducers/activeIndex.reducer';
 
+import cats from '../../data/cats.json';
+
 const Form = ({ cat, setCat, handleChange }) => {
     const carouselRef = useRef(null);
 
@@ -41,18 +43,20 @@ const Form = ({ cat, setCat, handleChange }) => {
 
     return (
         <Grid container>
-            <Grid item lg={12} sx={{ textAlign: 'center' }}>
+            <Grid item xl={12} lg={12} sx={{ textAlign: 'center' }}>
                 <TextField
                     label="Cat name"
                     value={cat.name}
                     name="name"
                     onChange={handleChange}
                 />
-                <Grid item lg={12} sx={{ mt: 2 }}>
+                <Grid item xl={12} lg={12} sx={{ mt: 2 }}>
                     <Carousel
                         goToSlide={changeCatOnClick}
                         ref={carouselRef}
                         setCat={setCat}
+                        slides={cats}
+                        category="cats"
                     />
                 </Grid>
             </Grid>

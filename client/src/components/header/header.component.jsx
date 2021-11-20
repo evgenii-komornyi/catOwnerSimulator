@@ -3,7 +3,14 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { setIsSound } from '../../redux/reducers/sound.reducer';
 
-import { AppBar, Box, Toolbar, IconButton, Typography } from '@mui/material';
+import {
+    AppBar,
+    Box,
+    Toolbar,
+    IconButton,
+    Typography,
+    Tooltip,
+} from '@mui/material';
 import {
     PlayCircleRounded,
     StopCircleRounded,
@@ -29,16 +36,22 @@ const Header = ({ startGame, stopGame }) => {
                 <Toolbar>
                     {intervalId !== 0 && (
                         <>
-                            <IconButton size="large">
-                                <img src={HappyCatCoins} alt="" width="70%" />
-                            </IconButton>
+                            <Tooltip title="HappyCatCoins" placement="bottom">
+                                <IconButton size="large">
+                                    <img
+                                        src={HappyCatCoins}
+                                        alt=""
+                                        width="70%"
+                                    />
+                                </IconButton>
+                            </Tooltip>
                             <Typography variant="h6" sx={{ ml: 1 }}>
-                                {happyCatCoins}
+                                {happyCatCoins.toFixed(2)}
                             </Typography>
                         </>
                     )}
                     <Box sx={{ flexGrow: 1 }} />
-                    <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+                    <Box sx={{ display: { xs: 'flex', md: 'flex' } }}>
                         <IconButton
                             size="large"
                             color="inherit"

@@ -38,7 +38,7 @@ const WhatNew = () => {
     const sortedData = data.sort((a, b) => new Date(b.date) - new Date(a.date));
 
     return (
-        <div>
+        <>
             <IconButton size="large" onClick={handleClickOpen} color="inherit">
                 <Announcement />
             </IconButton>
@@ -72,7 +72,7 @@ const WhatNew = () => {
                     <Button onClick={handleClose}>Cancel</Button>
                 </DialogActions>
             </Dialog>
-        </div>
+        </>
     );
 };
 

@@ -1,34 +1,22 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useRefCreate } from '../../hooks/useRefCreate';
 
-import { useDispatch } from 'react-redux';
-
-import { feedCat, petCat } from '../../redux/reducers/owner.reducer';
-
 import {
-    Card,
-    Grid,
-    CardContent,
-    LinearProgress,
-    Typography,
-    IconButton,
-} from '@mui/material';
+    feedCat,
+    petCat,
+    setDigestionLevel,
+} from '../../redux/reducers/owner.reducer';
 
-import FullHeart from '../../icons/fullHeart.png';
-import BrokenHeart from '../../icons/broken_heart.png';
-import FullFood from '../../icons/food_full.png';
-import EmptyFood from '../../icons/food_empty.png';
-import FullMood from '../../icons/mood_full.png';
-import EmptyMood from '../../icons/mood_empty.png';
+import { Card, Grid, CardContent, Typography } from '@mui/material';
+
+import Level from './level.component';
+import Action from '../action/action.component';
 
 import TombStone from '../../icons/tombstone.png';
 
 import { useStyles } from './cat.styles';
-import { PanTool, SetMeal } from '@mui/icons-material';
 
 const Cat = ({ cat }) => {
-    const dispatch = useDispatch();
-
     const [isVisible, setIsVisible] = useState(false);
 
     const classes = useStyles(isVisible);
@@ -66,38 +54,38 @@ const Cat = ({ cat }) => {
             });
     }, [currentAudio, cat.digestionLevel]);
 
-    const checkHealthLevel = () => {
-        switch (true) {
-            case cat.healthLevel > 0 && cat.healthLevel <= 100:
-                return FullHeart;
-            case cat.healthLevel <= 0:
-                return BrokenHeart;
-            default:
-                break;
-        }
-    };
+    const isDisabled = () => cat.foodLevel === 0 || cat.healthLevel < 100;
 
-    const checkFoodLevel = () => {
-        switch (true) {
-            case cat.foodLevel > 0 && cat.foodLevel <= 100:
-                return FullFood;
-            case cat.foodLevel <= 0:
-                return EmptyFood;
-            default:
-                break;
-        }
-    };
-
-    const checkMoodLevel = () => {
-        switch (true) {
-            case cat.moodLevel !== 0 && cat.moodLevel <= 100:
-                return FullMood;
-            case cat.moodLevel === 0:
-                return EmptyMood;
-            default:
-                break;
-        }
-    };
+    const actions = [
+        {
+            title: 'Feed cat',
+            dispatches: [
+                feedCat({
+                    id: cat.id,
+                    newFoodLevel:
+                        cat.foodLevel + 5 > 100 ? 100 : cat.foodLevel + 5,
+                }),
+                setDigestionLevel({
+                    id: cat.id,
+                    newDigestionLevel:
+                        cat.digestionLevel <= 0 ? 30 : cat.digestionLevel,
+                }),
+            ],
+            imgSrc: 'feed.png',
+            isDisabled: false,
+        },
+        {
+            title: 'Pet cat',
+            dispatches: [
+                petCat({
+                    id: cat.id,
+                    newMoodLevel: 100,
+                }),
+            ],
+            imgSrc: 'pet.png',
+            isDisabled: isDisabled(),
+        },
+    ];
 
     return (
         <>
@@ -113,8 +101,8 @@ const Cat = ({ cat }) => {
                     <>
                         <Typography variant="h6">{cat.name}</Typography>
                         <CardContent>
-                            <Grid container item lg={12} spacing={2}>
-                                <Grid item lg={12}>
+                            <Grid container item xl={12} lg={12} spacing={2}>
+                                <Grid item xl={12} lg={12}>
                                     <img
                                         alt={cat.name}
                                         src={`${
@@ -128,166 +116,32 @@ const Cat = ({ cat }) => {
                                         className={classes.catAvatar}
                                     />
                                 </Grid>
-                                <Grid
-                                    item
-                                    lg={2}
-                                    sx={{ textAlign: 'right', mt: -1 }}
-                                >
-                                    <img
-                                        src={checkHealthLevel()}
-                                        alt=""
-                                        className={classes.healthIcon}
-                                    />
-                                </Grid>
-                                <Grid
-                                    item
-                                    lg={10}
-                                    sx={{
-                                        textAlign: 'center',
-                                    }}
-                                >
-                                    {cat.healthLevel > 0 && (
-                                        <LinearProgress
-                                            variant="determinate"
-                                            value={Math.ceil(
-                                                (cat.healthLevel * 100) / 100
-                                            )}
-                                            color={`${
-                                                cat.healthLevel < 30
-                                                    ? 'error'
-                                                    : 'primary'
-                                            }`}
-                                            className={classes.progressBar}
-                                        />
-                                    )}
-                                </Grid>
-                                <Grid
-                                    item
-                                    lg={2}
-                                    sx={{ textAlign: 'right', mt: -1 }}
-                                >
-                                    <img
-                                        src={checkFoodLevel()}
-                                        alt=""
-                                        className={classes.foodIcon}
-                                    />
-                                </Grid>
-                                <Grid
-                                    item
-                                    lg={10}
-                                    sx={{
-                                        textAlign: 'center',
-                                    }}
-                                >
-                                    <LinearProgress
-                                        variant="determinate"
-                                        color={`${
-                                            cat.foodLevel < 30
-                                                ? 'error'
-                                                : 'primary'
-                                        }`}
-                                        value={Math.ceil(
-                                            (cat.foodLevel * 100) / 100
-                                        )}
-                                        className={classes.progressBar}
-                                    />
-                                </Grid>
-                                <Grid
-                                    item
-                                    lg={2}
-                                    sx={{ textAlign: 'right', mt: -1 }}
-                                >
-                                    <img
-                                        src={checkMoodLevel()}
-                                        alt=""
-                                        className={classes.moodIcon}
-                                    />
-                                </Grid>
-                                <Grid
-                                    item
-                                    lg={10}
-                                    sx={{
-                                        textAlign: 'center',
-                                    }}
-                                >
-                                    <LinearProgress
-                                        variant="determinate"
-                                        color={`${
-                                            cat.moodLevel < 30
-                                                ? 'error'
-                                                : 'primary'
-                                        }`}
-                                        value={Math.ceil(
-                                            (cat.moodLevel * 100) / 100
-                                        )}
-                                        className={classes.progressBar}
-                                    />
-                                </Grid>
+                                <Level value={cat.healthLevel} level="health" />
+                                <Level value={cat.foodLevel} level="food" />
+                                <Level value={cat.moodLevel} level="mood" />
                             </Grid>
                         </CardContent>
                         <Grid container className={classes.actions}>
-                            <Grid item lg={4}>
-                                <Card
-                                    variant="outlined"
-                                    sx={{
-                                        textAlign: 'center',
-                                    }}
-                                >
-                                    <CardContent>
-                                        <IconButton
-                                            color="success"
-                                            size="large"
-                                            aria-label="feed"
-                                            onClick={() =>
-                                                dispatch(
-                                                    feedCat({
-                                                        id: cat.id,
-                                                        newFoodLevel:
-                                                            cat.foodLevel + 5 >
-                                                            100
-                                                                ? 100
-                                                                : cat.foodLevel +
-                                                                  5,
-                                                    })
-                                                )
-                                            }
-                                        >
-                                            <SetMeal />
-                                        </IconButton>{' '}
-                                    </CardContent>
-                                </Card>
-                            </Grid>
-                            <Grid item lg={4}>
-                                <Card
-                                    variant="outlined"
-                                    sx={{
-                                        textAlign: 'center',
-                                    }}
-                                >
-                                    <CardContent>
-                                        <IconButton
-                                            color="primary"
-                                            size="large"
-                                            aria-label="feed"
-                                            onClick={() =>
-                                                dispatch(
-                                                    petCat({
-                                                        id: cat.id,
-                                                        newMoodLevel:
-                                                            cat.moodLevel + 10 >
-                                                            100
-                                                                ? 100
-                                                                : cat.moodLevel +
-                                                                  10,
-                                                    })
-                                                )
-                                            }
-                                        >
-                                            <PanTool />
-                                        </IconButton>{' '}
-                                    </CardContent>
-                                </Card>
-                            </Grid>
+                            {actions.map((action, index) => (
+                                <Grid item xl={4} lg={4} key={index}>
+                                    <Action
+                                        dispatches={action.dispatches}
+                                        title={action.title}
+                                        isDisabled={action.isDisabled}
+                                    >
+                                        <img
+                                            src={`${process.env.REACT_APP_HOST_IMG_URL}/owner/actions/${action.imgSrc}`}
+                                            width="100%"
+                                            alt={action.title}
+                                            className={`${
+                                                action.isDisabled
+                                                    ? classes.disabledAction
+                                                    : ''
+                                            }`}
+                                        />
+                                    </Action>
+                                </Grid>
+                            ))}
                         </Grid>
                     </>
                 )}

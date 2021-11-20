@@ -4,7 +4,7 @@ import { ArrowBack, ArrowForward } from '@mui/icons-material';
 import { useDispatch, useSelector } from 'react-redux';
 import { setActiveIndex } from '../../redux/reducers/activeIndex.reducer';
 
-const Buttons = ({ carouselRef, setCat, lastCat }) => {
+const Buttons = ({ carouselRef, setCat, lastItem }) => {
     const { activeIndex } = useSelector((state) => state.activeIndex);
 
     const dispatch = useDispatch();
@@ -51,7 +51,7 @@ const Buttons = ({ carouselRef, setCat, lastCat }) => {
 
         let index = activeIndex;
 
-        if (index < lastCat) {
+        if (index < lastItem) {
             index++;
             dispatch(setActiveIndex(index));
         }
@@ -84,7 +84,7 @@ const Buttons = ({ carouselRef, setCat, lastCat }) => {
                     left: '500px',
                     zIndex: 9999,
                     visibility: `${
-                        activeIndex === lastCat ? 'hidden' : 'visible'
+                        activeIndex === lastItem ? 'hidden' : 'visible'
                     }`,
                 }}
                 onClick={() => goToNextSlide()}

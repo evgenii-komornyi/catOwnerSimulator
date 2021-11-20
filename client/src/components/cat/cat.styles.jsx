@@ -4,13 +4,7 @@ export const useStyles = makeStyles({
     catAvatar: {
         marginTop: -15,
     },
-    healthIcon: {
-        width: 20,
-    },
-    foodIcon: {
-        width: 20,
-    },
-    moodIcon: {
+    icon: {
         width: 20,
     },
     progressBar: {},
@@ -21,5 +15,8 @@ export const useStyles = makeStyles({
         height: 210,
         backgroundColor: 'rgba(0,0,0,.5)',
         display: (props) => `${props ? 'inline-flex' : 'none'}`,
+    },
+    disabledAction: {
+        filter: 'grayscale(100%)',
     },
 });

@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
     isSound: true,
+    sound: '',
 };
 
 const reducer = createSlice({
@@ -10,6 +11,11 @@ const reducer = createSlice({
     reducers: {
         setIsSound: (state, { payload }) => {
             state = { isSound: !state.isSound };
+
+            return state;
+        },
+        setSound: (state, payload) => {
+            state = { ...state, sound: payload };
 
             return state;
         },

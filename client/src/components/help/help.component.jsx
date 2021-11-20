@@ -36,7 +36,7 @@ const Help = () => {
     }, [open]);
 
     return (
-        <div>
+        <>
             <IconButton size="large" onClick={handleClickOpen} color="inherit">
                 <HelpIcon />
             </IconButton>
@@ -70,7 +70,7 @@ const Help = () => {
                     <Button onClick={handleClose}>Cancel</Button>
                 </DialogActions>
             </Dialog>
-        </div>
+        </>
     );
 };
 

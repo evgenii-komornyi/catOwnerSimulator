@@ -3,10 +3,14 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useRefCreate } from './hooks/useRefCreate';
 
 import {
+    setHappyCatCoins,
     setFoodLevel,
     setHealthLevel,
     setMoodLevel,
     setDigestionLevel,
+    poopInToilet,
+    poopOnCarpet,
+    setSmell,
 } from './redux/reducers/owner.reducer';
 
 import { setIntervalId } from './redux/reducers/interval.reducer';
@@ -19,6 +23,8 @@ import { CssBaseline } from '@mui/material';
 import Header from './components/header/header.component';
 import MainPage from './pages/main.page';
 
+import { MAX_FLAT_SMELL } from './helpers/max_values';
+
 const darkTheme = createTheme({
     palette: {
         mode: 'dark',
@@ -28,12 +34,17 @@ const darkTheme = createTheme({
 let startGame;
 
 const App = () => {
-    const { cats } = useSelector((state) => state.owner);
+    const { happyCatCoins, cats, toilets, flat } = useSelector(
+        (state) => state.owner
+    );
     const { intervalId } = useSelector((state) => state.interval);
 
     const dispatch = useDispatch();
 
+    const currentHappyCatCoins = useRefCreate(happyCatCoins);
     const currentCats = useRefCreate(cats);
+    const currentToilets = useRefCreate(toilets);
+    const currentFlat = useRefCreate(flat);
 
     const startGameHandler = () => {
         startGame = setInterval(() => {
@@ -82,9 +93,54 @@ const App = () => {
                         })
                     );
 
-                    // if (cat.digestionLevel === 1) {
-                    //     dispatch(getShit(cat.digestionLevel));
-                    // }
+                    if (
+                        cat.moodLevel > 0 &&
+                        cat.foodLevel > 0 &&
+                        cat.healthLevel > 0
+                    ) {
+                        dispatch(
+                            setHappyCatCoins({
+                                newValue: currentHappyCatCoins.current + 0.01,
+                            })
+                        );
+                    }
+
+                    let isCatPooped = false;
+                    if (cat.digestionLevel === 1) {
+                        currentToilets.current.forEach((toilet) => {
+                            if (toilet.slots !== 0) {
+                                dispatch(poopInToilet());
+                                isCatPooped = true;
+                                return;
+                            }
+                        });
+
+                        if (!isCatPooped) dispatch(poopOnCarpet());
+                    }
+
+                    if (currentFlat.current.impurity !== 0) {
+                        dispatch(
+                            setSmell(
+                                currentFlat.current.smell +
+                                    currentFlat.current.impurity >
+                                    MAX_FLAT_SMELL
+                                    ? MAX_FLAT_SMELL
+                                    : currentFlat.current.smell +
+                                          currentFlat.current.impurity
+                            )
+                        );
+                    }
+
+                    if (currentFlat.current.isWindowOpen) {
+                        dispatch(
+                            setSmell(
+                                currentFlat.current.smell - 2 < 0
+                                    ? 0
+                                    : currentFlat.current.smell - 2
+                            )
+                        );
+                    }
+
                     dispatch(
                         setMoodLevel({
                             id: cat.id,
@@ -102,28 +158,6 @@ const App = () => {
         clearInterval(intervalId);
         dispatch(setIntervalId(0));
     };
-
-    // const feed = () => {
-    //     dispatch(
-    //         setFoodLevel(
-    //             currentFood.current + 5 > 100
-    //                 ? (currentFood.current = 100)
-    //                 : currentFood.current + 5
-    //         )
-    //     );
-
-    //     dispatch(
-    //         setDigestionLevel(
-    //             currentDigestion.current <= 0
-    //                 ? (currentDigestion.current = 30)
-    //                 : currentDigestion.current
-    //         )
-    //     );
-    // };
-
-    // const petCat = () => {
-    //     dispatch(setMoodLevel(100));
-    // };
 
     return (
         <ThemeProvider theme={darkTheme}>

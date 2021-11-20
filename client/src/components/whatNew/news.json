@@ -14,5 +14,9 @@
     {
         "date": "22 Oct 2021",
         "news": "Fixed bug with an audio and a gif. Added feature when toilet is using, then show gif with a dig animation, while audio is playing. Added button What is new?"
+    },
+    {
+        "date": "4 Nov 2021",
+        "news": "Added multi cat mode. Now you can create 4 cats maximum."
     }
 ]
