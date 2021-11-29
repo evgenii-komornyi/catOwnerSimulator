@@ -16,6 +16,7 @@ import Cat from '../cat/cat.component';
 import Action from '../action/action.component';
 
 import { MAX_FLAT_SMELL } from '../../helpers/max_values';
+import Sound from '../sound/sound.component';
 
 const Owner = () => {
     const { cats, flat, toilets } = useSelector((state) => state.owner);
@@ -104,7 +105,10 @@ const Owner = () => {
                     sx={{ alignContent: 'start' }}
                 >
                     <Grid item xl={4} lg={4}>
-                        <Action onClick={cleanToilets()} title="Clean toilets">
+                        <Action
+                            dispatches={[cleanToilets()]}
+                            title="Clean toilets"
+                        >
                             <img
                                 src={`${process.env.REACT_APP_HOST_IMG_URL}/owner/actions/clean_toilet.png`}
                                 width="100%"
@@ -113,7 +117,7 @@ const Owner = () => {
                         </Action>
                     </Grid>
                     <Grid item xl={4} lg={4}>
-                        <Action onClick={cleanRoom()} title="Clean room">
+                        <Action dispatches={[cleanRoom()]} title="Clean room">
                             <Badge badgeContent={flat.impurity} color="primary">
                                 <img
                                     src={`${process.env.REACT_APP_HOST_IMG_URL}/owner/actions/clean_room.png`}
@@ -124,7 +128,7 @@ const Owner = () => {
                         </Action>
                     </Grid>
                     <Grid item xl={4} lg={4}>
-                        <Action onClick={airRoom()} title="Air room">
+                        <Action dispatches={[airRoom()]} title="Air room">
                             <Badge
                                 badgeContent={flat.smell}
                                 color="primary"
@@ -144,6 +148,7 @@ const Owner = () => {
                     </Grid>
                 </Grid>
             </Grid>
+            <Sound />
         </>
     );
 };

@@ -1,5 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { useRefCreate } from '../../hooks/useRefCreate';
+import React, { useEffect, useState } from 'react';
 
 import {
     feedCat,
@@ -15,44 +14,23 @@ import Action from '../action/action.component';
 import TombStone from '../../icons/tombstone.png';
 
 import { useStyles } from './cat.styles';
+import { useDispatch } from 'react-redux';
+import { setSound } from '../../redux/reducers/sound.reducer';
 
 const Cat = ({ cat }) => {
+    const dispatch = useDispatch();
+
     const [isVisible, setIsVisible] = useState(false);
 
     const classes = useStyles(isVisible);
 
-    const audioRef = useRef();
-
-    const [audio, setAudio] = useState('');
-
-    const currentAudio = useRefCreate(audio);
+    useEffect(() => {
+        if (cat.digestionLevel <= 1) dispatch(setSound('poo'));
+    }, [cat.digestionLevel, dispatch]);
 
     useEffect(() => {
-        const audioElement = audioRef.current;
-
-        if (cat.digestionLevel <= 1) {
-            setAudio('poo');
-
-            if (audioRef.current) {
-                audioElement.load();
-
-                const playPromise = audioElement.play();
-                if (playPromise) {
-                    playPromise
-                        .then((_) => {
-                            return audioElement.play();
-                        })
-                        .catch((error) => {
-                            console.log(error.message);
-                        });
-                }
-            }
-        }
-        currentAudio.current !== '' &&
-            audioElement.addEventListener('ended', () => {
-                setAudio('');
-            });
-    }, [currentAudio, cat.digestionLevel]);
+        if (cat.moodLevel <= 0) dispatch(setSound('sad'));
+    }, [cat.moodLevel, dispatch]);
 
     const isDisabled = () => cat.foodLevel === 0 || cat.healthLevel < 100;
 
@@ -73,6 +51,7 @@ const Cat = ({ cat }) => {
             ],
             imgSrc: 'feed.png',
             isDisabled: false,
+            sound: 'eating',
         },
         {
             title: 'Pet cat',
@@ -84,6 +63,7 @@ const Cat = ({ cat }) => {
             ],
             imgSrc: 'pet.png',
             isDisabled: isDisabled(),
+            sound: 'purring',
         },
     ];
 
@@ -128,6 +108,7 @@ const Cat = ({ cat }) => {
                                         dispatches={action.dispatches}
                                         title={action.title}
                                         isDisabled={action.isDisabled}
+                                        sound={action.sound}
                                     >
                                         <img
                                             src={`${process.env.REACT_APP_HOST_IMG_URL}/owner/actions/${action.imgSrc}`}
@@ -146,14 +127,6 @@ const Cat = ({ cat }) => {
                     </>
                 )}
             </Card>
-            {currentAudio.current !== '' && (
-                <audio ref={audioRef}>
-                    <source
-                        src={`${process.env.REACT_APP_HOST_AUDIO_URL}/${currentAudio.current}.mp3`}
-                        type="audio/mpeg"
-                    />
-                </audio>
-            )}
         </>
     );
 };

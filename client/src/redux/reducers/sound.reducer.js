@@ -10,11 +10,11 @@ const reducer = createSlice({
     initialState,
     reducers: {
         setIsSound: (state, { payload }) => {
-            state = { isSound: !state.isSound };
+            state = { ...state, isSound: !state.isSound };
 
             return state;
         },
-        setSound: (state, payload) => {
+        setSound: (state, { payload }) => {
             state = { ...state, sound: payload };
 
             return state;
@@ -22,5 +22,5 @@ const reducer = createSlice({
     },
 });
 
-export const { setIsSound } = reducer.actions;
+export const { setIsSound, setSound } = reducer.actions;
 export const soundReducer = reducer.reducer;

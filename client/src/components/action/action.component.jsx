@@ -1,12 +1,15 @@
 import React from 'react';
 import { Card, CardContent, IconButton, Tooltip } from '@mui/material';
 import { useDispatch } from 'react-redux';
+import { setSound } from '../../redux/reducers/sound.reducer';
 
-const Action = ({ children, dispatches, isDisabled, title }) => {
+const Action = ({ children, dispatches, isDisabled, sound, title }) => {
     const dispatch = useDispatch();
 
     const onClickHandler = () => {
+        console.log();
         dispatches.map((click) => dispatch(click));
+        sound && dispatch(setSound(sound));
     };
 
     return (
