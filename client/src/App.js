@@ -123,29 +123,6 @@ const App = () => {
                         if (!isCatPooped) dispatch(poopOnCarpet());
                     }
 
-                    if (currentFlat.current.impurity !== 0) {
-                        dispatch(
-                            setSmell(
-                                currentFlat.current.smell +
-                                    currentFlat.current.impurity >
-                                    MAX_FLAT_SMELL
-                                    ? MAX_FLAT_SMELL
-                                    : currentFlat.current.smell +
-                                          currentFlat.current.impurity
-                            )
-                        );
-                    }
-
-                    if (currentFlat.current.isWindowOpen) {
-                        dispatch(
-                            setSmell(
-                                currentFlat.current.smell - 2 < 0
-                                    ? 0
-                                    : currentFlat.current.smell - 2
-                            )
-                        );
-                    }
-
                     dispatch(
                         setMoodLevel({
                             id: cat.id,
@@ -155,6 +132,28 @@ const App = () => {
                     );
                     return cat;
                 });
+            if (currentFlat.current.impurity !== 0) {
+                dispatch(
+                    setSmell(
+                        currentFlat.current.smell +
+                            currentFlat.current.impurity >
+                            MAX_FLAT_SMELL
+                            ? MAX_FLAT_SMELL
+                            : currentFlat.current.smell +
+                                  currentFlat.current.impurity
+                    )
+                );
+            }
+
+            if (currentFlat.current.isWindowOpen) {
+                dispatch(
+                    setSmell(
+                        currentFlat.current.smell - 2 < 0
+                            ? 0
+                            : currentFlat.current.smell - 2
+                    )
+                );
+            }
         }, timer * 1000);
         dispatch(setIntervalId(startGame));
     };

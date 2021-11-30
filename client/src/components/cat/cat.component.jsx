@@ -39,8 +39,7 @@ const Cat = ({ cat }) => {
         if (cat.moodLevel <= 0) dispatch(setSound('sad'));
     }, [cat.moodLevel, dispatch]);
 
-    const isDisabled = () =>
-        cat.foodLevel === 0 || cat.healthLevel < MAX_HEALTH_LEVEL;
+    const isDisabled = () => cat.foodLevel === 0;
 
     const actions = [
         {

@@ -9,7 +9,7 @@ const initialState = {
     id: generateID(),
     happyCatCoins: 100.0,
     flat: {
-        flat_img: 'flat_clean_wclosed',
+        flat_img: 'flat_day_clean_wclosed',
         isWindowOpen: false,
         impurity: 0,
         smell: 0,
