@@ -23,7 +23,7 @@ import { CssBaseline } from '@mui/material';
 import Header from './components/header/header.component';
 import MainPage from './pages/main.page';
 
-import { MAX_FLAT_SMELL } from './helpers/max_values';
+import { MAX_FLAT_SMELL, MAX_HEALTH_LEVEL } from './helpers/max_values';
 
 const darkTheme = createTheme({
     palette: {
@@ -46,18 +46,23 @@ const App = () => {
     const currentToilets = useRefCreate(toilets);
     const currentFlat = useRefCreate(flat);
 
+    const timer = 15;
+
     const startGameHandler = () => {
         startGame = setInterval(() => {
             currentCats.current.length !== 0 &&
                 currentCats.current.map((cat) => {
                     if (cat.foodLevel > 0) {
-                        if (cat.foodLevel > 50 && cat.healthLevel < 100) {
+                        if (
+                            cat.foodLevel > 50 &&
+                            cat.healthLevel < MAX_HEALTH_LEVEL
+                        ) {
                             dispatch(
                                 setHealthLevel({
                                     id: cat.id,
                                     newHealthLevel:
-                                        cat.healthLevel + 5 > 100
-                                            ? 100
+                                        cat.healthLevel + 5 > MAX_HEALTH_LEVEL
+                                            ? MAX_HEALTH_LEVEL
                                             : cat.healthLevel + 5,
                                 })
                             );
@@ -100,7 +105,7 @@ const App = () => {
                     ) {
                         dispatch(
                             setHappyCatCoins({
-                                newValue: currentHappyCatCoins.current + 0.01,
+                                newValue: currentHappyCatCoins.current + 0.15,
                             })
                         );
                     }
@@ -150,7 +155,7 @@ const App = () => {
                     );
                     return cat;
                 });
-        }, 1000);
+        }, timer * 1000);
         dispatch(setIntervalId(startGame));
     };
 

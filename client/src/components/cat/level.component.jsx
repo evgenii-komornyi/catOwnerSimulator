@@ -5,14 +5,14 @@ import { useStyles } from './cat.styles';
 
 import { checkLevel } from '../../helpers/levelChecker';
 
-const Level = ({ value, level }) => {
+const Level = ({ currentValue, maxValue, level }) => {
     const classes = useStyles();
 
     return (
         <>
             <Grid item xl={2} lg={2} sx={{ textAlign: 'right', mt: -1 }}>
                 <img
-                    src={checkLevel(value, level)}
+                    src={checkLevel(currentValue, level)}
                     alt=""
                     className={classes.icon}
                 />
@@ -27,8 +27,8 @@ const Level = ({ value, level }) => {
             >
                 <LinearProgress
                     variant="determinate"
-                    value={Math.ceil((value * 100) / 100)}
-                    color={`${value < 30 ? 'error' : 'primary'}`}
+                    value={Math.ceil((currentValue * 100) / maxValue)}
+                    color={`${currentValue < 30 ? 'error' : 'primary'}`}
                     className={classes.progressBar}
                 />
             </Grid>

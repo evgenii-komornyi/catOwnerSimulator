@@ -1,19 +1,21 @@
+import { MAX_FOOD_LEVEL, MAX_HEALTH_LEVEL, MAX_MOOD_LEVEL } from './max_values';
+
 const levels = {
     health: {
         min: 0,
-        max: 100,
+        max: MAX_HEALTH_LEVEL,
         full: 'full',
         empty: 'empty',
     },
     food: {
         min: 0,
-        max: 100,
+        max: MAX_FOOD_LEVEL,
         full: 'full',
         empty: 'empty',
     },
     mood: {
         min: 0,
-        max: 100,
+        max: MAX_MOOD_LEVEL,
         full: 'full',
         empty: 'empty',
     },

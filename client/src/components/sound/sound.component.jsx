@@ -42,7 +42,6 @@ const Sound = () => {
     return (
         sound !== '' && (
             <>
-                <h1>audio</h1>
                 <audio ref={audioRef} muted={!isSound} onEnded={toggleActive}>
                     <source
                         src={`${process.env.REACT_APP_HOST_AUDIO_URL}/${sound}.mp3`}

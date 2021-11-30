@@ -108,6 +108,7 @@ const Owner = () => {
                         <Action
                             dispatches={[cleanToilets()]}
                             title="Clean toilets"
+                            sound="toilet_cleanup"
                         >
                             <img
                                 src={`${process.env.REACT_APP_HOST_IMG_URL}/owner/actions/clean_toilet.png`}
@@ -117,7 +118,11 @@ const Owner = () => {
                         </Action>
                     </Grid>
                     <Grid item xl={4} lg={4}>
-                        <Action dispatches={[cleanRoom()]} title="Clean room">
+                        <Action
+                            dispatches={[cleanRoom()]}
+                            title="Clean room"
+                            sound="flat_cleanup"
+                        >
                             <Badge badgeContent={flat.impurity} color="primary">
                                 <img
                                     src={`${process.env.REACT_APP_HOST_IMG_URL}/owner/actions/clean_room.png`}
@@ -128,7 +133,15 @@ const Owner = () => {
                         </Action>
                     </Grid>
                     <Grid item xl={4} lg={4}>
-                        <Action dispatches={[airRoom()]} title="Air room">
+                        <Action
+                            dispatches={[airRoom()]}
+                            title="Air room"
+                            sound={
+                                flat.isWindowOpen
+                                    ? 'close_window'
+                                    : 'open_window'
+                            }
+                        >
                             <Badge
                                 badgeContent={flat.smell}
                                 color="primary"

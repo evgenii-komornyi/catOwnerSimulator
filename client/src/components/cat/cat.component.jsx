@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from 'react';
+import { Card, Grid, CardContent, Typography } from '@mui/material';
+import { useDispatch } from 'react-redux';
 
 import {
     feedCat,
@@ -6,7 +8,14 @@ import {
     setDigestionLevel,
 } from '../../redux/reducers/owner.reducer';
 
-import { Card, Grid, CardContent, Typography } from '@mui/material';
+import { setSound } from '../../redux/reducers/sound.reducer';
+
+import {
+    MAX_HEALTH_LEVEL,
+    MAX_FOOD_LEVEL,
+    MAX_MOOD_LEVEL,
+    MAX_DIGESTION_LEVEL,
+} from '../../helpers/max_values';
 
 import Level from './level.component';
 import Action from '../action/action.component';
@@ -14,8 +23,6 @@ import Action from '../action/action.component';
 import TombStone from '../../icons/tombstone.png';
 
 import { useStyles } from './cat.styles';
-import { useDispatch } from 'react-redux';
-import { setSound } from '../../redux/reducers/sound.reducer';
 
 const Cat = ({ cat }) => {
     const dispatch = useDispatch();
@@ -32,7 +39,8 @@ const Cat = ({ cat }) => {
         if (cat.moodLevel <= 0) dispatch(setSound('sad'));
     }, [cat.moodLevel, dispatch]);
 
-    const isDisabled = () => cat.foodLevel === 0 || cat.healthLevel < 100;
+    const isDisabled = () =>
+        cat.foodLevel === 0 || cat.healthLevel < MAX_HEALTH_LEVEL;
 
     const actions = [
         {
@@ -41,12 +49,16 @@ const Cat = ({ cat }) => {
                 feedCat({
                     id: cat.id,
                     newFoodLevel:
-                        cat.foodLevel + 5 > 100 ? 100 : cat.foodLevel + 5,
+                        cat.foodLevel + 5 > MAX_FOOD_LEVEL
+                            ? MAX_FOOD_LEVEL
+                            : cat.foodLevel + 5,
                 }),
                 setDigestionLevel({
                     id: cat.id,
                     newDigestionLevel:
-                        cat.digestionLevel <= 0 ? 30 : cat.digestionLevel,
+                        cat.digestionLevel <= 0
+                            ? MAX_DIGESTION_LEVEL
+                            : cat.digestionLevel,
                 }),
             ],
             imgSrc: 'feed.png',
@@ -58,7 +70,7 @@ const Cat = ({ cat }) => {
             dispatches: [
                 petCat({
                     id: cat.id,
-                    newMoodLevel: 100,
+                    newMoodLevel: MAX_MOOD_LEVEL,
                 }),
             ],
             imgSrc: 'pet.png',
@@ -96,9 +108,21 @@ const Cat = ({ cat }) => {
                                         className={classes.catAvatar}
                                     />
                                 </Grid>
-                                <Level value={cat.healthLevel} level="health" />
-                                <Level value={cat.foodLevel} level="food" />
-                                <Level value={cat.moodLevel} level="mood" />
+                                <Level
+                                    currentValue={cat.healthLevel}
+                                    maxValue={MAX_HEALTH_LEVEL}
+                                    level="health"
+                                />
+                                <Level
+                                    currentValue={cat.foodLevel}
+                                    maxValue={MAX_FOOD_LEVEL}
+                                    level="food"
+                                />
+                                <Level
+                                    currentValue={cat.moodLevel}
+                                    maxValue={MAX_MOOD_LEVEL}
+                                    level="mood"
+                                />
                             </Grid>
                         </CardContent>
                         <Grid container className={classes.actions}>

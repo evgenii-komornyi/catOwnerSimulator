@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { generateID } from '../../helpers/idGenerator.helper';
 import { findCatById } from '../../helpers/catManipulations';
+import { concatinator } from '../../helpers/flat.helper';
 
 const MAX_SLOTS_COUNT = 4;
 
@@ -8,7 +9,7 @@ const initialState = {
     id: generateID(),
     happyCatCoins: 100.0,
     flat: {
-        flat_img: 'apartment',
+        flat_img: 'flat_clean_wclosed',
         isWindowOpen: false,
         impurity: 0,
         smell: 0,
@@ -120,11 +121,20 @@ const reducer = createSlice({
                 flat: {
                     ...state.flat,
                     impurity: state.flat.impurity + 1,
-                    flat_img: !state.flat.isWindowOpen
-                        ? 'apartment_dirty'
-                        : 'apartment_dirty_openwindow',
                 },
             };
+
+            state = {
+                ...state,
+                flat: {
+                    ...state.flat,
+                    flat_img: concatinator(
+                        state.flat.isWindowOpen,
+                        state.flat.impurity
+                    ),
+                },
+            };
+
             return state;
         },
         setSmell: (state, { payload }) => {
@@ -144,9 +154,17 @@ const reducer = createSlice({
                 flat: {
                     ...state.flat,
                     impurity: 0,
-                    flat_img: !state.flat.isWindowOpen
-                        ? 'apartment'
-                        : 'apartment_openwindow',
+                },
+            };
+
+            state = {
+                ...state,
+                flat: {
+                    ...state.flat,
+                    flat_img: concatinator(
+                        state.flat.isWindowOpen,
+                        state.flat.impurity
+                    ),
                 },
             };
 
@@ -165,16 +183,10 @@ const reducer = createSlice({
                 ...state,
                 flat: {
                     ...state.flat,
-                    flat_img:
-                        state.flat.isWindowOpen && state.flat.impurity > 0
-                            ? 'apartment_dirty_openwindow'
-                            : !state.flat.isWindowOpen &&
-                              state.flat.impurity > 0
-                            ? 'apartment_dirty'
-                            : !state.flat.isWindowOpen &&
-                              state.flat.impurity === 0
-                            ? 'apartment'
-                            : 'apartment_openwindow',
+                    flat_img: concatinator(
+                        state.flat.isWindowOpen,
+                        state.flat.impurity
+                    ),
                 },
             };
             return state;
