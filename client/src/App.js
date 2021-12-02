@@ -127,7 +127,7 @@ const App = () => {
                         setMoodLevel({
                             id: cat.id,
                             newMoodLevel:
-                                cat.moodLevel - 5 < 0 ? 0 : cat.moodLevel - 5,
+                                cat.moodLevel - 1 < 0 ? 0 : cat.moodLevel - 1,
                         })
                     );
                     return cat;

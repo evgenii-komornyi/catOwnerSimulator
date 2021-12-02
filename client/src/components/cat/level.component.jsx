@@ -28,7 +28,11 @@ const Level = ({ currentValue, maxValue, level }) => {
                 <LinearProgress
                     variant="determinate"
                     value={Math.ceil((currentValue * 100) / maxValue)}
-                    color={`${currentValue < 30 ? 'error' : 'primary'}`}
+                    color={`${
+                        currentValue < Math.round(maxValue * 0.3)
+                            ? 'error'
+                            : 'primary'
+                    }`}
                     className={classes.progressBar}
                 />
             </Grid>

@@ -47,10 +47,7 @@ const Cat = ({ cat }) => {
             dispatches: [
                 feedCat({
                     id: cat.id,
-                    newFoodLevel:
-                        cat.foodLevel + 5 > MAX_FOOD_LEVEL
-                            ? MAX_FOOD_LEVEL
-                            : cat.foodLevel + 5,
+                    newFoodLevel: MAX_FOOD_LEVEL,
                 }),
                 setDigestionLevel({
                     id: cat.id,

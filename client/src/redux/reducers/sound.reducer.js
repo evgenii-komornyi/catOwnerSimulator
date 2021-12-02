@@ -2,6 +2,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
     isSound: true,
+    volume: 50,
     sound: '',
 };
 
@@ -14,6 +15,11 @@ const reducer = createSlice({
 
             return state;
         },
+        setVolume: (state, { payload }) => {
+            state = { ...state, volume: payload };
+
+            return state;
+        },
         setSound: (state, { payload }) => {
             state = { ...state, sound: payload };
 
@@ -22,5 +28,5 @@ const reducer = createSlice({
     },
 });
 
-export const { setIsSound, setSound } = reducer.actions;
+export const { setIsSound, setVolume, setSound } = reducer.actions;
 export const soundReducer = reducer.reducer;

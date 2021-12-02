@@ -5,7 +5,7 @@ import { setSound } from '../../redux/reducers/sound.reducer';
 
 const Sound = () => {
     const audioRef = useRef();
-    const { sound, isSound } = useSelector((state) => state.sound);
+    const { sound, isSound, volume } = useSelector((state) => state.sound);
 
     const [active, setActive] = useState(false);
 
@@ -19,6 +19,8 @@ const Sound = () => {
         const audioElement = audioRef.current;
 
         if (audioElement) {
+            audioElement.volume = volume / 100;
+            console.log(audioElement.volume);
             audioElement.load();
 
             const playPromise = audioElement.play();
