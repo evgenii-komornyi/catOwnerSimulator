@@ -167,7 +167,7 @@ const App = () => {
         <ThemeProvider theme={darkTheme}>
             <CssBaseline />
             <Header startGame={startGameHandler} stopGame={stopGameHandler} />
-            <MainPage />
+            <MainPage startGame={startGameHandler} />
             <Modal />
         </ThemeProvider>
     );
