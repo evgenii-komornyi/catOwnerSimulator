@@ -32,7 +32,7 @@ const Cat = ({ cat }) => {
     const classes = useStyles(isVisible);
 
     useEffect(() => {
-        if (cat.digestionLevel < 1) dispatch(setSound('poo'));
+        if (cat.digestionLevel === 1) dispatch(setSound('poo'));
     }, [cat.digestionLevel, dispatch]);
 
     useEffect(() => {
