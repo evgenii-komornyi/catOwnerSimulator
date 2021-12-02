@@ -20,7 +20,7 @@ const Sound = () => {
 
         if (audioElement) {
             audioElement.volume = volume / 100;
-            console.log(audioElement.volume);
+
             audioElement.load();
 
             const playPromise = audioElement.play();

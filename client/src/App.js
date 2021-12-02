@@ -130,8 +130,10 @@ const App = () => {
                                 cat.moodLevel - 1 < 0 ? 0 : cat.moodLevel - 1,
                         })
                     );
+
                     return cat;
                 });
+
             if (currentFlat.current.impurity !== 0) {
                 dispatch(
                     setSmell(

@@ -104,7 +104,7 @@ const Modal = () => {
                 </AppBar>
                 <Container maxWidth="lg">
                     <Grid container>
-                        <Grid item xl={12} lg={12}>
+                        <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
                             <DialogContent>
                                 <Form
                                     cat={cat}
@@ -113,7 +113,15 @@ const Modal = () => {
                                 />
                             </DialogContent>
                         </Grid>
-                        <Grid item xl={12} lg={12} sx={{ textAlign: 'center' }}>
+                        <Grid
+                            item
+                            xl={12}
+                            lg={12}
+                            md={12}
+                            sm={12}
+                            xs={12}
+                            sx={{ textAlign: 'center' }}
+                        >
                             <Button
                                 variant="outlined"
                                 autoFocus

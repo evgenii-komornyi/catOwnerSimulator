@@ -43,14 +43,30 @@ const Form = ({ cat, setCat, handleChange }) => {
 
     return (
         <Grid container>
-            <Grid item xl={12} lg={12} sx={{ textAlign: 'center' }}>
+            <Grid
+                item
+                xl={12}
+                lg={12}
+                md={12}
+                sm={12}
+                xs={12}
+                sx={{ textAlign: 'center' }}
+            >
                 <TextField
                     label="Cat name"
                     value={cat.name}
                     name="name"
                     onChange={handleChange}
                 />
-                <Grid item xl={12} lg={12} sx={{ mt: 2 }}>
+                <Grid
+                    item
+                    xl={12}
+                    lg={12}
+                    md={12}
+                    sm={12}
+                    xs={12}
+                    sx={{ mt: 2 }}
+                >
                     <Carousel
                         goToSlide={changeCatOnClick}
                         ref={carouselRef}
