@@ -100,13 +100,6 @@ const Modal = () => {
                         >
                             Choose a cat
                         </Typography>
-                        <Button
-                            autoFocus
-                            color="inherit"
-                            onClick={startGameHandler}
-                        >
-                            Adopt
-                        </Button>
                     </Toolbar>
                 </AppBar>
                 <Container maxWidth="lg">
@@ -119,6 +112,17 @@ const Modal = () => {
                                     handleChange={handleChange}
                                 />
                             </DialogContent>
+                        </Grid>
+                        <Grid item xl={12} lg={12} sx={{ textAlign: 'center' }}>
+                            <Button
+                                variant="outlined"
+                                autoFocus
+                                color="inherit"
+                                disabled={cat.name === ''}
+                                onClick={startGameHandler}
+                            >
+                                Adopt
+                            </Button>
                         </Grid>
                     </Grid>
                 </Container>
