@@ -52,8 +52,7 @@ const Carousel = memo(
                     {slides.map((slide, index) => (
                         <Card
                             variant="elevation"
-                            className="item"
-                            sx={{ width: '250px', mr: 'auto', ml: 'auto' }}
+                            className={`item ${classes.itemCard}`}
                             key={index}
                             data-index={index}
                             data-img={slide.img}
@@ -63,9 +62,9 @@ const Carousel = memo(
                         >
                             <CardContent>
                                 <img
-                                    style={{ width: '100%' }}
                                     src={`${process.env.REACT_APP_HOST_IMG_URL}/${category}/${slide.img}.png`}
                                     data-img={slide.img}
+                                    className={classes.carouselImg}
                                     alt={slide.color}
                                 />
                             </CardContent>

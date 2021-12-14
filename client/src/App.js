@@ -88,6 +88,7 @@ const App = () => {
                             })
                         );
                     }
+
                     dispatch(
                         setDigestionLevel({
                             id: cat.id,

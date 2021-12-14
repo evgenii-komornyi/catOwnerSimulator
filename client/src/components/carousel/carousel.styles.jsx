@@ -1,41 +1,47 @@
 import { makeStyles } from '@mui/styles';
+import { useTheme } from '@emotion/react';
 
-export const useStyles = makeStyles({
-    carousel: {
-        padding: '5px',
+export const useStyles = makeStyles(() => {
+    const theme = useTheme();
 
-        '& .owl-item.active.center img': {
-            border: '10px solid white',
-        },
-        '& .owl-nav button': {
-            width: 50,
-            height: 50,
-            fontSize: '29px !important',
-            border: '1px solid #fff !important',
-            borderRadius: '50% !important',
+    return {
+        prevBtn: {
+            position: 'relative',
+            top: '-160px',
+            right: '500px',
+            zIndex: 9999,
 
-            '&.owl-prev': {
-                position: 'absolute',
-                left: -25,
-                top: 100,
-
-                '& span': {
-                    position: 'relative',
-                    top: -2,
-                    left: -1,
-                },
-            },
-            '&.owl-next': {
-                position: 'absolute',
-                right: -25,
-                top: 100,
-
-                '& span': {
-                    position: 'relative',
-                    top: -2,
-                    right: -1,
-                },
+            [theme.breakpoints.down('sm')]: {
+                right: 0,
+                top: 0,
             },
         },
-    },
+        nextBtn: {
+            position: 'relative',
+            top: '-160px',
+            left: '500px',
+            zIndex: 9999,
+
+            [theme.breakpoints.down('sm')]: {
+                left: 0,
+                top: 0,
+            },
+        },
+        carousel: {
+            padding: '5px',
+
+            '& .owl-item.active.center img': {
+                border: '10px solid white',
+            },
+        },
+        itemCard: {
+            width: '250px',
+            marginRight: 'auto',
+            marginLeft: 'auto',
+        },
+
+        carouselImg: {
+            width: '100%',
+        },
+    };
 });

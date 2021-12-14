@@ -17,8 +17,11 @@ import Action from '../action/action.component';
 
 import { MAX_FLAT_SMELL } from '../../helpers/max_values';
 import Sound from '../sound/sound.component';
+import { useStyles } from './owner.styles';
 
 const Owner = () => {
+    const classes = useStyles();
+
     const { cats, flat, toilets } = useSelector((state) => state.owner);
     const dispatch = useDispatch();
 
@@ -32,18 +35,19 @@ const Owner = () => {
             >
                 {cats.length !== 0 &&
                     cats.map((cat, key) => (
-                        <Grid item xl={3} lg={3} key={key}>
+                        <Grid item xl={3} lg={3} md={3} sm={4} xs={6} key={key}>
                             <Cat cat={cat} />
                         </Grid>
                     ))}
                 {cats.length < 4 && (
-                    <Grid item xl={3} lg={3}>
+                    <Grid item xl={3} lg={3} md={3} sm={4} xs={6}>
                         <CardActionArea onClick={() => dispatch(setIsOpen())}>
-                            <Card variant="elevation" sx={{ height: 315 }}>
+                            <Card
+                                variant="elevation"
+                                className={classes.cardAdd}
+                            >
                                 <CardContent>
-                                    <Add
-                                        sx={{ fontSize: 250, color: '#333' }}
-                                    />
+                                    <Add className={classes.addBtn} />
                                 </CardContent>
                             </Card>
                         </CardActionArea>
@@ -62,6 +66,7 @@ const Owner = () => {
                         <img
                             src={`${process.env.REACT_APP_HOST_IMG_URL}/owner/apartment/${flat.flat_img}.png`}
                             alt=""
+                            style={{ width: '100%' }}
                         />
                         <div
                             style={{

@@ -4,7 +4,11 @@ import { ArrowBack, ArrowForward } from '@mui/icons-material';
 import { useDispatch, useSelector } from 'react-redux';
 import { setActiveIndex } from '../../redux/reducers/activeIndex.reducer';
 
+import { useStyles } from './carousel.styles';
+
 const Buttons = ({ carouselRef, setCat, lastItem }) => {
+    const classes = useStyles();
+
     const { activeIndex } = useSelector((state) => state.activeIndex);
 
     const dispatch = useDispatch();
@@ -63,11 +67,8 @@ const Buttons = ({ carouselRef, setCat, lastItem }) => {
                 color="success"
                 size="large"
                 aria-label="prev"
-                sx={{
-                    position: 'relative',
-                    top: '-160px',
-                    right: '500px',
-                    zIndex: 9999,
+                className={classes.prevBtn}
+                style={{
                     visibility: `${activeIndex === 0 ? 'hidden' : 'visible'}`,
                 }}
                 onClick={() => goToPreviousSlide()}
@@ -78,11 +79,8 @@ const Buttons = ({ carouselRef, setCat, lastItem }) => {
                 color="success"
                 size="large"
                 aria-label="next"
-                sx={{
-                    position: 'relative',
-                    top: '-160px',
-                    left: '500px',
-                    zIndex: 9999,
+                className={classes.nextBtn}
+                style={{
                     visibility: `${
                         activeIndex === lastItem ? 'hidden' : 'visible'
                     }`,

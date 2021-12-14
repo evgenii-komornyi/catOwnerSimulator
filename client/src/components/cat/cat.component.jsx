@@ -79,7 +79,7 @@ const Cat = ({ cat }) => {
         <>
             <Card
                 variant="elevation"
-                sx={{ height: 315, p: 0 }}
+                className={classes.catCard}
                 onMouseOver={() => setIsVisible(true)}
                 onMouseLeave={() => setIsVisible(false)}
             >
