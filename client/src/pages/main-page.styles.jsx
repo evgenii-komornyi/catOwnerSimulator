@@ -5,15 +5,11 @@ export const useStyles = makeStyles(() => {
     const theme = useTheme();
 
     return {
-        startGame: {
-            cursor: 'pointer',
-            marginTop: 20,
-            '&:hover': {
-                filter: 'sepia(100%)',
-            },
+        container: {
+            marginTop: 40,
 
             [theme.breakpoints.down('sm')]: {
-                width: '60%',
+                marginTop: -10,
             },
         },
     };

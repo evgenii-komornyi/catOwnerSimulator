@@ -13,6 +13,11 @@ export const useStyles = makeStyles(() => {
                 height: 'auto',
             },
         },
+        catName: {
+            [theme.breakpoints.down('sm')]: {
+                fontSize: 15,
+            },
+        },
         catAvatar: {
             marginTop: -15,
         },

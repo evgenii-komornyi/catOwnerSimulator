@@ -20,5 +20,10 @@ export const useStyles = makeStyles(() => {
                 fontSize: 130,
             },
         },
+        cardCat: {
+            [theme.breakpoints.down('sm')]: {
+                paddingTop: '2px !important',
+            },
+        },
     };
 });

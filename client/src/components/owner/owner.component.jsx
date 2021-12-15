@@ -35,12 +35,29 @@ const Owner = () => {
             >
                 {cats.length !== 0 &&
                     cats.map((cat, key) => (
-                        <Grid item xl={3} lg={3} md={3} sm={4} xs={6} key={key}>
+                        <Grid
+                            item
+                            xl={3}
+                            lg={3}
+                            md={3}
+                            sm={4}
+                            xs={6}
+                            key={key}
+                            className={classes.cardCat}
+                        >
                             <Cat cat={cat} />
                         </Grid>
                     ))}
                 {cats.length < 4 && (
-                    <Grid item xl={3} lg={3} md={3} sm={4} xs={6}>
+                    <Grid
+                        item
+                        xl={3}
+                        lg={3}
+                        md={3}
+                        sm={4}
+                        xs={6}
+                        className={classes.cardCat}
+                    >
                         <CardActionArea onClick={() => dispatch(setIsOpen())}>
                             <Card
                                 variant="elevation"
@@ -55,13 +72,31 @@ const Owner = () => {
                 )}
             </Grid>
             <Grid container>
-                <Grid item xl={2} lg={2} sx={{ textAlign: 'right' }}>
+                <Grid
+                    item
+                    xl={2}
+                    lg={2}
+                    md={2}
+                    sm={4}
+                    xs={4}
+                    sx={{ textAlign: 'right' }}
+                >
                     <img
                         src={`${process.env.REACT_APP_HOST_IMG_URL}/owner/apartment/house_slot.png`}
                         alt=""
+                        style={{ width: '100%' }}
                     />
                 </Grid>
-                <Grid container item xl={4} lg={4} sx={{ textAlign: 'center' }}>
+                <Grid
+                    container
+                    item
+                    xl={4}
+                    lg={4}
+                    md={4}
+                    sm={8}
+                    xs={8}
+                    sx={{ textAlign: 'center' }}
+                >
                     <Grid item xl={12} lg={12}>
                         <img
                             src={`${process.env.REACT_APP_HOST_IMG_URL}/owner/apartment/${flat.flat_img}.png`}
@@ -81,23 +116,42 @@ const Owner = () => {
                             }}
                         />
                     </Grid>
-                    <Grid item xl={6} lg={6} sx={{ mt: -0.9 }}>
+                    <Grid
+                        item
+                        xl={6}
+                        lg={6}
+                        md={6}
+                        sm={6}
+                        xs={6}
+                        sx={{ mt: -0.9 }}
+                    >
                         {toilets.length === 0 ? (
                             <img
                                 src={`${process.env.REACT_APP_HOST_IMG_URL}/owner/apartment/toilet_slot.png`}
                                 alt=""
+                                style={{ width: '100%' }}
                             />
                         ) : (
                             <img
                                 src={`${process.env.REACT_APP_HOST_IMG_URL}/owner/items/toilets/${toilets[0].toilet_img}.png`}
                                 alt=""
+                                style={{ width: '100%' }}
                             />
                         )}
                     </Grid>
-                    <Grid item xl={6} lg={6} sx={{ mt: -0.9 }}>
+                    <Grid
+                        item
+                        xl={6}
+                        lg={6}
+                        md={6}
+                        sm={6}
+                        xs={6}
+                        sx={{ mt: -0.9 }}
+                    >
                         <img
                             src={`${process.env.REACT_APP_HOST_IMG_URL}/owner/apartment/toys_slot.png`}
                             alt=""
+                            style={{ width: '100%' }}
                         />
                     </Grid>
                 </Grid>
@@ -105,24 +159,29 @@ const Owner = () => {
                     item
                     xl={4}
                     lg={4}
+                    md={4}
+                    sm={12}
+                    xs={12}
                     container
                     spacing={1}
                     sx={{ alignContent: 'start' }}
                 >
-                    <Grid item xl={4} lg={4}>
+                    <Grid item xl={4} lg={4} md={4} sm={4} xs={4}>
                         <Action
                             dispatches={[cleanToilets()]}
                             title="Clean toilets"
                             sound="toilet_cleanup"
                         >
-                            <img
-                                src={`${process.env.REACT_APP_HOST_IMG_URL}/owner/actions/clean_toilet.png`}
-                                width="100%"
-                                alt="clean_toilets"
-                            />
+                            <Badge badgeContent={0} color="primary">
+                                <img
+                                    src={`${process.env.REACT_APP_HOST_IMG_URL}/owner/actions/clean_toilet.png`}
+                                    alt="clean_toilets"
+                                    style={{ width: '100%' }}
+                                />
+                            </Badge>
                         </Action>
                     </Grid>
-                    <Grid item xl={4} lg={4}>
+                    <Grid item xl={4} lg={4} md={4} sm={4} xs={4}>
                         <Action
                             dispatches={[cleanRoom()]}
                             title="Clean room"
@@ -131,13 +190,13 @@ const Owner = () => {
                             <Badge badgeContent={flat.impurity} color="primary">
                                 <img
                                     src={`${process.env.REACT_APP_HOST_IMG_URL}/owner/actions/clean_room.png`}
-                                    width="100%"
                                     alt="clean_flat"
+                                    style={{ width: '100%' }}
                                 />
                             </Badge>
                         </Action>
                     </Grid>
-                    <Grid item xl={4} lg={4}>
+                    <Grid item xl={4} lg={4} md={4} sm={4} xs={4}>
                         <Action
                             dispatches={[airRoom()]}
                             title="Air room"
@@ -158,8 +217,8 @@ const Owner = () => {
                                     }/owner/actions/window_${
                                         flat.isWindowOpen ? 'close' : 'open'
                                     }.png`}
-                                    width="100%"
                                     alt="blow"
+                                    style={{ width: '100%' }}
                                 />
                             </Badge>
                         </Action>

@@ -87,7 +87,9 @@ const Cat = ({ cat }) => {
                     <img src={TombStone} width="100%" alt={cat.name} />
                 ) : (
                     <>
-                        <Typography variant="h6">{cat.name}</Typography>
+                        <Typography variant="h6" className={classes.catName}>
+                            {cat.name}
+                        </Typography>
                         <CardContent>
                             <Grid container item xl={12} lg={12} spacing={2}>
                                 <Grid item xl={12} lg={12}>

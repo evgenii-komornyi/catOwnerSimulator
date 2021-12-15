@@ -1,21 +1,41 @@
 import React from 'react';
 
-import { Grid, LinearProgress } from '@mui/material';
+import { Badge, Grid, LinearProgress } from '@mui/material';
+import { useMediaQuery } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
+
 import { useStyles } from './cat.styles';
 
 import { checkLevel } from '../../helpers/levelChecker';
 
 const Level = ({ currentValue, maxValue, level }) => {
     const classes = useStyles();
+    const theme = useTheme();
+    const matched = useMediaQuery(theme.breakpoints.up('lg'));
 
     return (
         <>
             <Grid item xl={2} lg={2} sx={{ textAlign: 'right', mt: -1 }}>
-                <img
-                    src={checkLevel(currentValue, level)}
-                    alt=""
-                    className={classes.icon}
-                />
+                {matched ? (
+                    <img
+                        src={checkLevel(currentValue, level)}
+                        alt=""
+                        className={classes.icon}
+                    />
+                ) : (
+                    <Badge
+                        max={100}
+                        badgeContent={Math.ceil(
+                            (currentValue * 100) / maxValue
+                        )}
+                    >
+                        <img
+                            src={checkLevel(currentValue, level)}
+                            alt=""
+                            className={classes.icon}
+                        />
+                    </Badge>
+                )}
             </Grid>
             <Grid
                 item
