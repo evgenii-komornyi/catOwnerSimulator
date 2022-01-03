@@ -7,7 +7,6 @@ const Action = ({ children, dispatches, isDisabled, sound, title }) => {
     const dispatch = useDispatch();
 
     const onClickHandler = () => {
-        console.log();
         dispatches.map((click) => dispatch(click));
         sound && dispatch(setSound(sound));
     };

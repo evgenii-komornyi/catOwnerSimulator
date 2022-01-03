@@ -46,7 +46,7 @@ const App = () => {
     const currentToilets = useRefCreate(toilets);
     const currentFlat = useRefCreate(flat);
 
-    const timer = 15;
+    const timer = 1;
 
     const startGameHandler = () => {
         startGame = setInterval(() => {

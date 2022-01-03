@@ -10,7 +10,7 @@ export const useStyles = makeStyles(() => {
             padding: 0,
 
             [theme.breakpoints.down('sm')]: {
-                height: 'auto',
+                height: 190,
             },
         },
         catName: {

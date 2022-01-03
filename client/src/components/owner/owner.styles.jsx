@@ -9,7 +9,8 @@ export const useStyles = makeStyles(() => {
             height: 315,
 
             [theme.breakpoints.down('sm')]: {
-                height: 200,
+                width: 50,
+                height: 50,
             },
         },
         addBtn: {
@@ -17,13 +18,22 @@ export const useStyles = makeStyles(() => {
             color: '#333',
 
             [theme.breakpoints.down('sm')]: {
-                fontSize: 130,
+                fontSize: 20,
             },
         },
         cardCat: {
             [theme.breakpoints.down('sm')]: {
                 paddingTop: '2px !important',
             },
+        },
+        smell: {
+            position: 'relative',
+            width: '99%',
+            height: '92%',
+            top: -198,
+            left: 3,
+
+            [theme.breakpoints.down('sm')]: { top: -115, left: 0 },
         },
     };
 });

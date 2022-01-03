@@ -1,6 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-import { Badge, Card, CardActionArea, CardContent, Grid } from '@mui/material';
+import {
+    Badge,
+    Card,
+    CardActionArea,
+    CardContent,
+    Grid,
+    useMediaQuery,
+} from '@mui/material';
 import { Add } from '@mui/icons-material';
 
 import { useDispatch, useSelector } from 'react-redux';
@@ -14,16 +21,32 @@ import {
 
 import Cat from '../cat/cat.component';
 import Action from '../action/action.component';
+import ActionMenu from '../action/action-menu.component';
+import MobileAction from '../action/mobile-action.component';
 
 import { MAX_FLAT_SMELL } from '../../helpers/max_values';
 import Sound from '../sound/sound.component';
 import { useStyles } from './owner.styles';
+import { useTheme } from '@emotion/react';
 
 const Owner = () => {
+    const theme = useTheme();
+    const matched = useMediaQuery(theme.breakpoints.up('sm'));
+
     const classes = useStyles();
 
     const { cats, flat, toilets } = useSelector((state) => state.owner);
     const dispatch = useDispatch();
+
+    const [anchorEl, setAnchorEl] = useState(null);
+    const open = Boolean(anchorEl);
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
 
     return (
         <>
@@ -105,15 +128,11 @@ const Owner = () => {
                         />
                         <div
                             style={{
-                                position: 'relative',
-                                width: '99%',
-                                height: '96%',
-                                top: '-198px',
-                                left: '3px',
                                 backgroundColor: `rgba(0, 255, 0, ${
                                     flat.smell / MAX_FLAT_SMELL
                                 })`,
                             }}
+                            className={classes.smell}
                         />
                     </Grid>
                     <Grid
@@ -155,76 +174,125 @@ const Owner = () => {
                         />
                     </Grid>
                 </Grid>
-                <Grid
-                    item
-                    xl={4}
-                    lg={4}
-                    md={4}
-                    sm={12}
-                    xs={12}
-                    container
-                    spacing={1}
-                    sx={{ alignContent: 'start' }}
-                >
-                    <Grid item xl={4} lg={4} md={4} sm={4} xs={4}>
-                        <Action
-                            dispatches={[cleanToilets()]}
-                            title="Clean toilets"
-                            sound="toilet_cleanup"
-                        >
-                            <Badge badgeContent={0} color="primary">
-                                <img
-                                    src={`${process.env.REACT_APP_HOST_IMG_URL}/owner/actions/clean_toilet.png`}
-                                    alt="clean_toilets"
-                                    style={{ width: '100%' }}
-                                />
-                            </Badge>
-                        </Action>
-                    </Grid>
-                    <Grid item xl={4} lg={4} md={4} sm={4} xs={4}>
-                        <Action
-                            dispatches={[cleanRoom()]}
-                            title="Clean room"
-                            sound="flat_cleanup"
-                        >
-                            <Badge badgeContent={flat.impurity} color="primary">
-                                <img
-                                    src={`${process.env.REACT_APP_HOST_IMG_URL}/owner/actions/clean_room.png`}
-                                    alt="clean_flat"
-                                    style={{ width: '100%' }}
-                                />
-                            </Badge>
-                        </Action>
-                    </Grid>
-                    <Grid item xl={4} lg={4} md={4} sm={4} xs={4}>
-                        <Action
-                            dispatches={[airRoom()]}
-                            title="Air room"
-                            sound={
-                                flat.isWindowOpen
-                                    ? 'close_window'
-                                    : 'open_window'
-                            }
-                        >
-                            <Badge
-                                badgeContent={flat.smell}
-                                color="primary"
-                                max={100}
+                {matched && (
+                    <Grid
+                        item
+                        xl={4}
+                        lg={4}
+                        md={4}
+                        sm={12}
+                        xs={12}
+                        container
+                        spacing={1}
+                        sx={{ alignContent: 'start' }}
+                    >
+                        <Grid item xl={4} lg={4} md={4} sm={4} xs={4}>
+                            <Action
+                                dispatches={[cleanToilets()]}
+                                title="Clean toilets"
+                                sound="toilet_cleanup"
                             >
-                                <img
-                                    src={`${
-                                        process.env.REACT_APP_HOST_IMG_URL
-                                    }/owner/actions/window_${
-                                        flat.isWindowOpen ? 'close' : 'open'
-                                    }.png`}
-                                    alt="blow"
-                                    style={{ width: '100%' }}
-                                />
-                            </Badge>
-                        </Action>
+                                <Badge badgeContent={0} color="primary">
+                                    <img
+                                        src={`${process.env.REACT_APP_HOST_IMG_URL}/owner/actions/clean_toilet.png`}
+                                        alt="clean_toilets"
+                                        style={{ width: '100%' }}
+                                    />
+                                </Badge>
+                            </Action>
+                        </Grid>
+                        <Grid item xl={4} lg={4} md={4} sm={4} xs={4}>
+                            <Action
+                                dispatches={[cleanRoom()]}
+                                title="Clean room"
+                                sound="flat_cleanup"
+                            >
+                                <Badge
+                                    badgeContent={flat.impurity}
+                                    color="primary"
+                                >
+                                    <img
+                                        src={`${process.env.REACT_APP_HOST_IMG_URL}/owner/actions/clean_room.png`}
+                                        alt="clean_flat"
+                                        style={{ width: '100%' }}
+                                    />
+                                </Badge>
+                            </Action>
+                        </Grid>
+                        <Grid item xl={4} lg={4} md={4} sm={4} xs={4}>
+                            <Action
+                                dispatches={[airRoom()]}
+                                title="Air room"
+                                sound={
+                                    flat.isWindowOpen
+                                        ? 'close_window'
+                                        : 'open_window'
+                                }
+                            >
+                                <Badge
+                                    badgeContent={flat.smell}
+                                    color="primary"
+                                    max={100}
+                                >
+                                    <img
+                                        src={`${
+                                            process.env.REACT_APP_HOST_IMG_URL
+                                        }/owner/actions/window_${
+                                            flat.isWindowOpen ? 'close' : 'open'
+                                        }.png`}
+                                        alt="blow"
+                                        style={{ width: '100%' }}
+                                    />
+                                </Badge>
+                            </Action>
+                        </Grid>
                     </Grid>
-                </Grid>
+                )}
             </Grid>
+            {!matched && (
+                <ActionMenu
+                    anchorEl={anchorEl}
+                    open={open}
+                    handleClose={handleClose}
+                    handleClick={handleClick}
+                    title="Flat"
+                    margin={{}}
+                >
+                    <MobileAction
+                        dispatches={[cleanToilets()]}
+                        sound="toilet_cleanup"
+                        handleClose={handleClose}
+                    >
+                        <Badge badgeContent={0} color="primary">
+                            Clean toilets
+                        </Badge>
+                    </MobileAction>
+                    <MobileAction
+                        dispatches={[cleanRoom()]}
+                        sound="flat_cleanup"
+                        handleClose={handleClose}
+                    >
+                        <Badge badgeContent={flat.impurity} color="primary">
+                            Clean room
+                        </Badge>
+                    </MobileAction>
+                    <MobileAction
+                        dispatches={[airRoom()]}
+                        sound={
+                            flat.isWindowOpen ? 'close_window' : 'open_window'
+                        }
+                        handleClose={handleClose}
+                    >
+                        <Badge
+                            badgeContent={flat.smell}
+                            color="primary"
+                            max={100}
+                        >
+                            {flat.isWindowOpen ? 'Close ' : 'Open '} window
+                        </Badge>
+                    </MobileAction>
+                </ActionMenu>
+            )}
             <Sound />
         </>
     );
