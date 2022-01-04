@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import {
     Badge,
@@ -10,6 +10,7 @@ import {
 } from '@mui/material';
 import { Add } from '@mui/icons-material';
 
+import { useTheme } from '@emotion/react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { setIsOpen } from '../../redux/reducers/modal.reducer';
@@ -21,13 +22,11 @@ import {
 
 import Cat from '../cat/cat.component';
 import Action from '../action/action.component';
-import ActionMenu from '../action/action-menu.component';
-import MobileAction from '../action/mobile-action.component';
+import Sound from '../sound/sound.component';
 
 import { MAX_FLAT_SMELL } from '../../helpers/max_values';
-import Sound from '../sound/sound.component';
+
 import { useStyles } from './owner.styles';
-import { useTheme } from '@emotion/react';
 
 const Owner = () => {
     const theme = useTheme();
@@ -37,16 +36,6 @@ const Owner = () => {
 
     const { cats, flat, toilets } = useSelector((state) => state.owner);
     const dispatch = useDispatch();
-
-    const [anchorEl, setAnchorEl] = useState(null);
-    const open = Boolean(anchorEl);
-    const handleClick = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
-
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
 
     return (
         <>
@@ -249,50 +238,6 @@ const Owner = () => {
                     </Grid>
                 )}
             </Grid>
-            {!matched && (
-                <ActionMenu
-                    anchorEl={anchorEl}
-                    open={open}
-                    handleClose={handleClose}
-                    handleClick={handleClick}
-                    title="Flat"
-                    margin={{}}
-                >
-                    <MobileAction
-                        dispatches={[cleanToilets()]}
-                        sound="toilet_cleanup"
-                        handleClose={handleClose}
-                    >
-                        <Badge badgeContent={0} color="primary">
-                            Clean toilets
-                        </Badge>
-                    </MobileAction>
-                    <MobileAction
-                        dispatches={[cleanRoom()]}
-                        sound="flat_cleanup"
-                        handleClose={handleClose}
-                    >
-                        <Badge badgeContent={flat.impurity} color="primary">
-                            Clean room
-                        </Badge>
-                    </MobileAction>
-                    <MobileAction
-                        dispatches={[airRoom()]}
-                        sound={
-                            flat.isWindowOpen ? 'close_window' : 'open_window'
-                        }
-                        handleClose={handleClose}
-                    >
-                        <Badge
-                            badgeContent={flat.smell}
-                            color="primary"
-                            max={100}
-                        >
-                            {flat.isWindowOpen ? 'Close ' : 'Open '} window
-                        </Badge>
-                    </MobileAction>
-                </ActionMenu>
-            )}
             <Sound />
         </>
     );

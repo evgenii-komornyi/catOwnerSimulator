@@ -5,18 +5,11 @@ import { setSound } from '../../redux/reducers/sound.reducer';
 
 import { useDispatch } from 'react-redux';
 
-const MobileAction = ({
-    children,
-    dispatches,
-    isDisabled,
-    sound,
-    handleClose,
-}) => {
+const MobileAction = ({ children, dispatches, isDisabled, sound }) => {
     const dispatch = useDispatch();
 
     const onClickHandler = () => {
         dispatches.map((click) => dispatch(click));
-        handleClose();
         sound && dispatch(setSound(sound));
     };
 

@@ -1,8 +1,13 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { styled, alpha } from '@mui/material/styles';
-import { Menu, Button } from '@mui/material';
-import { KeyboardArrowDown } from '@mui/icons-material';
+import { Menu, Button, IconButton, Badge } from '@mui/material';
+import {
+    KeyboardArrowDown,
+    NotificationsActiveTwoTone,
+} from '@mui/icons-material';
+import { useSelector } from 'react-redux';
+import { useAnchorEl } from '../../hooks/useAnchorEl';
 
 const StyledMenu = styled((props) => (
     <Menu
@@ -47,30 +52,59 @@ const StyledMenu = styled((props) => (
     },
 }));
 
-const ActionMenu = ({
-    children,
-    anchorEl,
-    open,
-    handleClose,
-    handleClick,
-    title,
-    margin,
-}) => {
+const ActionMenu = ({ children, title, margin }) => {
+    const { flat, toilets } = useSelector((state) => state.owner);
+
+    const [anchorEl, open, handleClick, handleClose] = useAnchorEl();
+
+    const [isInvisible, setIsInvisible] = useState(true);
+
+    useEffect(() => {
+        const hasToiletShit = toilets.every((toilet) => toilet.slots < 4);
+
+        hasToiletShit || flat.impurity !== 0 || flat.smell !== 0
+            ? setIsInvisible(false)
+            : setIsInvisible(true);
+    }, [isInvisible, flat.impurity, flat.smell, toilets]);
+
     return (
         <>
-            <Button
-                id="demo-customized-button"
-                aria-controls={open ? 'demo-customized-menu' : undefined}
-                aria-haspopup="true"
-                aria-expanded={open ? 'true' : undefined}
-                variant="outlined"
-                disableElevation
-                onClick={handleClick}
-                endIcon={<KeyboardArrowDown />}
-                sx={margin}
-            >
-                {title} actions
-            </Button>
+            {title === 'Flat' ? (
+                <IconButton
+                    id="demo-customized-button"
+                    aria-controls={open ? 'demo-customized-menu' : undefined}
+                    aria-haspopup="true"
+                    aria-expanded={open ? 'true' : undefined}
+                    variant="outlined"
+                    disableElevation
+                    onClick={handleClick}
+                    endIcon={<KeyboardArrowDown />}
+                    sx={margin}
+                >
+                    <Badge
+                        variant="dot"
+                        showZero
+                        color="secondary"
+                        invisible={isInvisible}
+                    >
+                        <NotificationsActiveTwoTone />
+                    </Badge>
+                </IconButton>
+            ) : (
+                <Button
+                    id="demo-customized-button"
+                    aria-controls={open ? 'demo-customized-menu' : undefined}
+                    aria-haspopup="true"
+                    aria-expanded={open ? 'true' : undefined}
+                    variant="outlined"
+                    disableElevation
+                    onClick={handleClick}
+                    endIcon={<KeyboardArrowDown />}
+                    sx={margin}
+                >
+                    {title} actions
+                </Button>
+            )}
             <StyledMenu
                 id="demo-customized-menu"
                 MenuListProps={{

@@ -13,29 +13,14 @@ const Level = ({ currentValue, maxValue, level }) => {
     const theme = useTheme();
     const matched = useMediaQuery(theme.breakpoints.up('lg'));
 
-    return (
+    return matched ? (
         <>
             <Grid item xl={2} lg={2} sx={{ textAlign: 'right', mt: -1 }}>
-                {matched ? (
-                    <img
-                        src={checkLevel(currentValue, level)}
-                        alt=""
-                        className={classes.icon}
-                    />
-                ) : (
-                    <Badge
-                        max={100}
-                        badgeContent={Math.ceil(
-                            (currentValue * 100) / maxValue
-                        )}
-                    >
-                        <img
-                            src={checkLevel(currentValue, level)}
-                            alt=""
-                            className={classes.icon}
-                        />
-                    </Badge>
-                )}
+                <img
+                    src={checkLevel(currentValue, level)}
+                    alt=""
+                    className={classes.icon}
+                />
             </Grid>
             <Grid
                 item
@@ -57,6 +42,20 @@ const Level = ({ currentValue, maxValue, level }) => {
                 />
             </Grid>
         </>
+    ) : (
+        <Grid item xl={4} lg={4} md={4} sm={4} xs={4}>
+            <Badge
+                max={100}
+                badgeContent={Math.ceil((currentValue * 100) / maxValue)}
+                showZero
+            >
+                <img
+                    src={checkLevel(currentValue, level)}
+                    alt=""
+                    className={classes.icon}
+                />
+            </Badge>
+        </Grid>
     );
 };
 

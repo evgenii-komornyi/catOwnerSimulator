@@ -53,15 +53,6 @@ const Cat = ({ cat }) => {
 
     const isDisabled = () => cat.foodLevel === 0;
 
-    const [anchorEl, setAnchorEl] = useState(null);
-    const open = Boolean(anchorEl);
-    const handleClick = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
-
     const actions = [
         {
             title: 'Feed cat',
@@ -127,21 +118,52 @@ const Cat = ({ cat }) => {
                                         className={classes.catAvatar}
                                     />
                                 </Grid>
-                                <Level
-                                    currentValue={cat.healthLevel}
-                                    maxValue={MAX_HEALTH_LEVEL}
-                                    level="health"
-                                />
-                                <Level
-                                    currentValue={cat.foodLevel}
-                                    maxValue={MAX_FOOD_LEVEL}
-                                    level="food"
-                                />
-                                <Level
-                                    currentValue={cat.moodLevel}
-                                    maxValue={MAX_MOOD_LEVEL}
-                                    level="mood"
-                                />
+                                {!matched ? (
+                                    <Grid
+                                        container
+                                        item
+                                        xs={12}
+                                        sx={{
+                                            position: 'relative',
+                                            top: -35,
+                                            right: 5,
+                                        }}
+                                    >
+                                        <Level
+                                            currentValue={cat.healthLevel}
+                                            maxValue={MAX_HEALTH_LEVEL}
+                                            level="health"
+                                        />
+                                        <Level
+                                            currentValue={cat.foodLevel}
+                                            maxValue={MAX_FOOD_LEVEL}
+                                            level="food"
+                                        />
+                                        <Level
+                                            currentValue={cat.moodLevel}
+                                            maxValue={MAX_MOOD_LEVEL}
+                                            level="mood"
+                                        />
+                                    </Grid>
+                                ) : (
+                                    <>
+                                        <Level
+                                            currentValue={cat.healthLevel}
+                                            maxValue={MAX_HEALTH_LEVEL}
+                                            level="health"
+                                        />
+                                        <Level
+                                            currentValue={cat.foodLevel}
+                                            maxValue={MAX_FOOD_LEVEL}
+                                            level="food"
+                                        />
+                                        <Level
+                                            currentValue={cat.moodLevel}
+                                            maxValue={MAX_MOOD_LEVEL}
+                                            level="mood"
+                                        />
+                                    </>
+                                )}
                             </Grid>
                         </CardContent>
                         {matched ? (
@@ -177,12 +199,8 @@ const Cat = ({ cat }) => {
                                     style={{ margin: '0 auto' }}
                                 >
                                     <ActionMenu
-                                        anchorEl={anchorEl}
-                                        open={open}
-                                        handleClose={handleClose}
-                                        handleClick={handleClick}
                                         title="Cat"
-                                        margin={{ mt: -7 }}
+                                        margin={{ mt: -11 }}
                                     >
                                         {actions.map((action, index) => (
                                             <div key={index}>
@@ -194,7 +212,6 @@ const Cat = ({ cat }) => {
                                                         action.isDisabled
                                                     }
                                                     sound={action.sound}
-                                                    handleClose={handleClose}
                                                 >
                                                     {action.title}
                                                 </MobileAction>

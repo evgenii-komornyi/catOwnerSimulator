@@ -10,6 +10,7 @@ export const useStyles = makeStyles(() => {
 
             [theme.breakpoints.down('sm')]: {
                 marginTop: -10,
+                marginBottom: 60,
             },
         },
     };
