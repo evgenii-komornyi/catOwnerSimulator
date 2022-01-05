@@ -76,9 +76,7 @@ const ActionMenu = ({ children, title, margin }) => {
                     aria-haspopup="true"
                     aria-expanded={open ? 'true' : undefined}
                     variant="outlined"
-                    disableElevation
                     onClick={handleClick}
-                    endIcon={<KeyboardArrowDown />}
                     sx={margin}
                 >
                     <Badge
