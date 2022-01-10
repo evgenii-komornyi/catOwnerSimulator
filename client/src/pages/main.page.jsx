@@ -1,22 +1,24 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 
-import { Container, Typography, useMediaQuery } from '@mui/material';
+import { Container, Typography } from '@mui/material';
 import Owner from '../components/owner/owner.component';
 import Menu from '../components/menu/menu.component';
 import { useStyles } from './main-page.styles';
+import useResolutionCheck from '../hooks/useResolutionCheck';
 
 const MainPage = ({ startGame }) => {
-    const landscape = useMediaQuery('(orientation: landscape)');
+    const [isMobile, isLandscape, isWidthLess, isWidthMore] =
+        useResolutionCheck();
 
     const classes = useStyles();
 
     const { intervalId } = useSelector((state) => state.interval);
 
-    return landscape ? (
+    return (isMobile && isLandscape && !isWidthMore) || isWidthLess ? (
         <Container maxWidth="lg" className={classes.container}>
             <Typography variant="h3">
-                This app is not support on landscape oriented devices
+                This app does not support this device
             </Typography>
         </Container>
     ) : (
