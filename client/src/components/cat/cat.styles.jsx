@@ -28,6 +28,10 @@ export const useStyles = makeStyles(() => {
             [theme.breakpoints.between(422, 603)]: {
                 height: 200,
             },
+
+            [theme.breakpoints.between(600, 960)]: {
+                height: 230,
+            },
         },
         catName: {
             [theme.breakpoints.down('sm')]: {

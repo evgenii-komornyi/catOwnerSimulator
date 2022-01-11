@@ -41,7 +41,7 @@ const Cat = ({ cat }) => {
     const classes = useStyles(isVisible);
 
     const theme = useTheme();
-    const matched = useMediaQuery(theme.breakpoints.up('md'));
+    const matched = useMediaQuery(theme.breakpoints.up('lg'));
 
     useEffect(() => {
         if (cat.digestionLevel === 1) dispatch(setSound('poo'));

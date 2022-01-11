@@ -30,7 +30,7 @@ import { useStyles } from './owner.styles';
 
 const Owner = () => {
     const theme = useTheme();
-    const matched = useMediaQuery(theme.breakpoints.up('sm'));
+    const matched = useMediaQuery(theme.breakpoints.up('lg'));
 
     const classes = useStyles();
 

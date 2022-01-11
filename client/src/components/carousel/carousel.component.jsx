@@ -24,7 +24,7 @@ const Carousel = memo(
                 center: true,
                 items: 1,
             },
-            600: {
+            1000: {
                 dots: false,
                 nav: false,
                 loop: false,

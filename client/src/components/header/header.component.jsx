@@ -35,10 +35,9 @@ import MobileAction from '../action/mobile-action.component';
 import { useTheme } from '@emotion/react';
 
 const Header = ({ startGame, stopGame }) => {
-    const matches = useMediaQuery('(min-width: 769px)');
-
     const theme = useTheme();
-    const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+    const matches = useMediaQuery(theme.breakpoints.up('lg'));
+    const isMobile = useMediaQuery(theme.breakpoints.between(0, 960));
 
     const { intervalId } = useSelector((state) => state.interval);
     const { happyCatCoins, flat, toilets } = useSelector(
@@ -98,96 +97,102 @@ const Header = ({ startGame, stopGame }) => {
                             <WhatNew />
                         </Box>
                     ) : (
-                        <>
-                            <IconButton
-                                size="large"
-                                color="inherit"
-                                aria-controls="basic-menu"
-                                aria-haspopup="true"
-                                aria-expanded={open ? 'true' : undefined}
-                                onClick={handleClick}
-                            >
-                                <MenuIcon />
-                            </IconButton>
-                            <Menu
-                                id="basic-menu"
-                                anchorEl={anchorEl}
-                                open={open}
-                                onClose={handleClose}
-                                MenuListProps={{
-                                    'aria-labelledby': 'basic-button',
-                                }}
-                            >
-                                <MenuItem>
-                                    <IconButton
-                                        size="large"
-                                        color="inherit"
-                                        onClick={
-                                            intervalId === 0
-                                                ? () => startGame()
-                                                : () => stopGame()
+                        intervalId !== 0 && (
+                            <>
+                                <IconButton
+                                    size="large"
+                                    color="inherit"
+                                    aria-controls="basic-menu"
+                                    aria-haspopup="true"
+                                    aria-expanded={open ? 'true' : undefined}
+                                    onClick={handleClick}
+                                >
+                                    <MenuIcon />
+                                </IconButton>
+                                <Menu
+                                    id="basic-menu"
+                                    anchorEl={anchorEl}
+                                    open={open}
+                                    onClose={handleClose}
+                                    MenuListProps={{
+                                        'aria-labelledby': 'basic-button',
+                                    }}
+                                >
+                                    <MenuItem>
+                                        <IconButton
+                                            size="large"
+                                            color="inherit"
+                                            onClick={
+                                                intervalId === 0
+                                                    ? () => startGame()
+                                                    : () => stopGame()
+                                            }
+                                        >
+                                            {intervalId === 0 ? (
+                                                <PlayCircleRounded />
+                                            ) : (
+                                                <StopCircleRounded />
+                                            )}
+                                        </IconButton>
+                                    </MenuItem>
+                                    <MenuItem>
+                                        <SoundSettings />
+                                    </MenuItem>
+                                    <MenuItem>
+                                        <Help />
+                                    </MenuItem>
+                                    <MenuItem>
+                                        <WhatNew />
+                                    </MenuItem>
+                                </Menu>
+                                <ActionMenu title="Flat" margin={{}}>
+                                    <MobileAction
+                                        dispatches={[cleanToilets()]}
+                                        sound="toilet_cleanup"
+                                    >
+                                        <Badge
+                                            color="primary"
+                                            variant={
+                                                hasDot ? 'dot' : 'standard'
+                                            }
+                                            showZero
+                                        >
+                                            Clean toilets
+                                        </Badge>
+                                    </MobileAction>
+                                    <MobileAction
+                                        dispatches={[cleanRoom()]}
+                                        sound="flat_cleanup"
+                                    >
+                                        <Badge
+                                            badgeContent={flat.impurity}
+                                            color="primary"
+                                        >
+                                            Clean room
+                                        </Badge>
+                                    </MobileAction>
+                                    <MobileAction
+                                        dispatches={[airRoom()]}
+                                        sound={
+                                            flat.isWindowOpen
+                                                ? 'close_window'
+                                                : 'open_window'
                                         }
                                     >
-                                        {intervalId === 0 ? (
-                                            <PlayCircleRounded />
-                                        ) : (
-                                            <StopCircleRounded />
-                                        )}
-                                    </IconButton>
-                                </MenuItem>
-                                <MenuItem>
-                                    <SoundSettings />
-                                </MenuItem>
-                                <MenuItem>
-                                    <Help />
-                                </MenuItem>
-                                <MenuItem>
-                                    <WhatNew />
-                                </MenuItem>
-                            </Menu>
-                            <ActionMenu title="Flat" margin={{}}>
-                                <MobileAction
-                                    dispatches={[cleanToilets()]}
-                                    sound="toilet_cleanup"
-                                >
-                                    <Badge
-                                        color="primary"
-                                        variant={hasDot ? 'dot' : 'standard'}
-                                        showZero
-                                    >
-                                        Clean toilets
-                                    </Badge>
-                                </MobileAction>
-                                <MobileAction
-                                    dispatches={[cleanRoom()]}
-                                    sound="flat_cleanup"
-                                >
-                                    <Badge
-                                        badgeContent={flat.impurity}
-                                        color="primary"
-                                    >
-                                        Clean room
-                                    </Badge>
-                                </MobileAction>
-                                <MobileAction
-                                    dispatches={[airRoom()]}
-                                    sound={
-                                        flat.isWindowOpen
-                                            ? 'close_window'
-                                            : 'open_window'
-                                    }
-                                >
-                                    <Badge
-                                        badgeContent={flat.smell}
-                                        color="primary"
-                                        max={100}
-                                    >
-                                        {flat.isWindowOpen ? 'Close ' : 'Open '}{' '}
-                                        window
-                                    </Badge>
-                                </MobileAction>
-                            </ActionMenu>
-                        </>
+                                        <Badge
+                                            badgeContent={flat.smell}
+                                            color="primary"
+                                            max={100}
+                                        >
+                                            {flat.isWindowOpen
+                                                ? 'Close '
+                                                : 'Open '}{' '}
+                                            window
+                                        </Badge>
+                                    </MobileAction>
+                                </ActionMenu>
+                            </>
+                        )
                     )}
                 </Toolbar>
             </AppBar>

@@ -12,6 +12,11 @@ export const useStyles = makeStyles(() => {
                 width: 50,
                 height: 50,
             },
+
+            [theme.breakpoints.between(600, 960)]: {
+                width: 100,
+                height: 100,
+            },
         },
         addBtn: {
             fontSize: 250,
@@ -19,6 +24,10 @@ export const useStyles = makeStyles(() => {
 
             [theme.breakpoints.down('sm')]: {
                 fontSize: 20,
+            },
+
+            [theme.breakpoints.between(600, 960)]: {
+                fontSize: 50,
             },
         },
         cardCat: {

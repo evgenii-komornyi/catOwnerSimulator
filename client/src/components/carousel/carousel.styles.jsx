@@ -11,7 +11,7 @@ export const useStyles = makeStyles(() => {
             right: '500px',
             zIndex: 9999,
 
-            [theme.breakpoints.down('sm')]: {
+            [theme.breakpoints.between(0, 960)]: {
                 right: 0,
                 top: 0,
             },
@@ -22,7 +22,7 @@ export const useStyles = makeStyles(() => {
             left: '500px',
             zIndex: 9999,
 
-            [theme.breakpoints.down('sm')]: {
+            [theme.breakpoints.between(0, 960)]: {
                 left: 0,
                 top: 0,
             },
