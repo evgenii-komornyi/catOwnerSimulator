@@ -17,6 +17,18 @@
     },
     {
         "date": "4 Nov 2021",
-        "news": "Added multi cat mode. Now you can create 4 cats maximum."
+        "news": "Added multi cat mode. Now you can create 4 cats maximum. Added feed and pet actions."
+    },
+    {
+        "date": "20 Nov 2021",
+        "news": "Now if cats' box is full, cats poop on the carpet. Flat becomes dirty and smell. You can open/close window to air the room, also you can clean toilet and carpet."
+    },
+    {
+        "date": "29 Nov 2021",
+        "news": "Added sounds on the owner and the cats actions."
+    },
+    {
+        "date": "11 Jan 2022",
+        "news": "Now you can start the game on mobile phones and tablets."
     }
 ]
